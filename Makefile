@@ -26,8 +26,8 @@ KERNEL_CFG=config-${KERNEL_VER}
 
 KERNEL_CFG_ORG=${RHKERSRCDIR}/kernel-${KERNEL_VER}-x86_64.config
 
-FW_VER=1.0
-FW_REL=23
+FW_VER=1.1
+FW_REL=1
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
 #AOEDIR=aoe6-77
@@ -293,7 +293,7 @@ ${HDR_DEB} hdr: .compile_mark headers-control.in headers-postinst.in
 linux-firmware.git/WHENCE:
 	git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git linux-firmware.git
 
-${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE changelog.firmware fwlist-2.6.18-2-pve fwlist-2.6.24-12-pve fwlist-2.6.32-3-pve fwlist-2.6.32-4-pve fwlist-2.6.32-5-pve fwlist-2.6.32-6-pve fwlist-2.6.35-1-pve fwlist-2.6.32-13-pve fwlist-2.6.32-14-pve fwlist-2.6.32-15-pve fwlist-2.6.32-20-pve fwlist-${KVNAME}
+${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE changelog.firmware fwlist-2.6.18-2-pve fwlist-2.6.24-12-pve fwlist-2.6.32-3-pve fwlist-2.6.32-4-pve fwlist-2.6.32-6-pve fwlist-2.6.35-1-pve fwlist-2.6.32-13-pve fwlist-2.6.32-14-pve fwlist-2.6.32-20-pve fwlist-${KVNAME}
 	rm -rf fwdata
 	mkdir -p fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-${KVNAME} fwdata/lib/firmware
@@ -302,13 +302,10 @@ ${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE changelog.firmware fwli
 	./assemble-firmware.pl fwlist-2.6.18-2-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-3-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-4-pve fwdata/lib/firmware
-	./assemble-firmware.pl fwlist-2.6.32-5-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-6-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.35-1-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-13-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-14-pve fwdata/lib/firmware
-	./assemble-firmware.pl fwlist-2.6.32-15-pve fwdata/lib/firmware
-	./assemble-firmware.pl fwlist-2.6.32-16-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-20-pve fwdata/lib/firmware
 	install -d fwdata/usr/share/doc/pve-firmware
 	cp linux-firmware.git/WHENCE fwdata/usr/share/doc/pve-firmware/README
