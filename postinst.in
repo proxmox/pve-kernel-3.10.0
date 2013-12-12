@@ -1,0 +1,23 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+# Ignore all invocations except when called on to configure.
+exit 0 unless $ARGV[0] =~ /configure/;
+
+# do nothing if run from proxmox installer
+exit 0 if -e "/proxmox_install_mode";
+
+my $imagedir = "/boot";
+
+my $version = "@@KVNAME@@";
+
+system("depmod $version");
+
+system("update-initramfs -c -t -b $imagedir -k $version"); 
+
+if (-x "/usr/sbin/update-grub") {
+    system("/usr/sbin/update-grub");
+}
+
+exit 0
