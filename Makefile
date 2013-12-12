@@ -290,10 +290,13 @@ ${HDR_DEB} hdr: .compile_mark headers-control.in headers-postinst.in
 	dpkg-deb --build $(headers_tmp) ${HDR_DEB}
 	#lintian ${HDR_DEB}
 
+dvb-firmware.git/README:
+	git clone https://github.com/OpenELEC/dvb-firmware.git dvb-firmware.git
+
 linux-firmware.git/WHENCE:
 	git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git linux-firmware.git
 
-${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE changelog.firmware fwlist-2.6.18-2-pve fwlist-2.6.24-12-pve fwlist-2.6.32-3-pve fwlist-2.6.32-4-pve fwlist-2.6.32-6-pve fwlist-2.6.35-1-pve fwlist-2.6.32-13-pve fwlist-2.6.32-14-pve fwlist-2.6.32-20-pve fwlist-${KVNAME}
+${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README changelog.firmware fwlist-2.6.18-2-pve fwlist-2.6.24-12-pve fwlist-2.6.32-3-pve fwlist-2.6.32-4-pve fwlist-2.6.32-6-pve fwlist-2.6.35-1-pve fwlist-2.6.32-13-pve fwlist-2.6.32-14-pve fwlist-2.6.32-20-pve fwlist-${KVNAME}
 	rm -rf fwdata
 	mkdir -p fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-${KVNAME} fwdata/lib/firmware

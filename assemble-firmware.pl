@@ -4,8 +4,9 @@ use strict;
 use File::Basename;
 use File::Path;
 
-my $fwsrc0 = "linux-2.6-2.6.32/firmware";
+my $fwsrc0 = "linux-2.6-3.10.0/firmware";
 my $fwsrc1 = "linux-firmware.git";
+my $fwsrc2 = "dvb-firmware.git";
 my $fwsrc3 = "firmware-misc";
 
 my $fwlist = shift;
@@ -23,6 +24,24 @@ my $force_skip = {
 my $skip = {};
 # debian squeeze also misses those files
 foreach my $fw (qw(
+sms1xxx-stellar-dvbt-01.fw 
+sms1xxx-nova-b-dvbt-01.fw
+sms1xxx-nova-a-dvbt-01.fw
+mrvl/sd8897_uapsta.bin
+mrvl/pcie8766_uapsta.bin
+mrvl/sd8786_uapsta.bin
+cxgb4/t5fw.bin
+brcm/brcmfmac-sdio.txt
+brcm/brcmfmac-sdio.bin
+brcm/brcmfmac43242a.bin
+brcm/brcmfmac43143.bin
+ct2fw-3.1.0.0.bin
+ctfw-3.1.0.0.bin 
+cbfw-3.1.0.0.bin
+
+phanfw-4.0.579.bin
+
+
 libertas/gspi8385.bin libertas/gspi8385_hlp.bin
 ctfw.bin ct2fw.bin ctfw-3.0.3.1.bin ct2fw-3.0.3.1.bin
 cbfw.bin cbfw-3.0.3.1.bin 
@@ -154,6 +173,10 @@ while(defined(my $line = <TMP>)) {
     # use package bluez-firmware instead
     next if $fw =~ m|^BCM2033|;
 
+    next if $fw =~ m|^xc3028-v27\.fw|; # found twice!
+    next if $fw =~ m|.inp|; # where are those files?
+    next if $fw =~ m|^ueagle-atm/|; # where are those files?
+
     next if $force_skip->{$fw};
 
     next if $fwdone->{$fw};
@@ -188,6 +211,7 @@ while(defined(my $line = <TMP>)) {
 
     if ($fw =~ m|/|) {
 	next if $skip->{$fw};
+
 	die "unable to find firmware: $fw $mod\n";
     }
 
@@ -200,6 +224,15 @@ while(defined(my $line = <TMP>)) {
 	copy_fw($sr, $fwdest);
 	next;
     }
+
+    $sr = `find '$fwsrc2' -type f -name '$name'`;
+    chomp $sr;
+    if ($sr) {
+	print "found $fw in $sr\n";
+	copy_fw($sr, $fwdest);
+	next;
+    }
+
     $sr = `find '$fwsrc3' -type f -name '$name'`;
     chomp $sr;
     if ($sr) {
@@ -209,6 +242,7 @@ while(defined(my $line = <TMP>)) {
     }
 
     next if $skip->{$fw};
+    next if $fw =~ m|^dvb-|;
 
     die "unable to find firmware: $fw $mod\n";
 }
