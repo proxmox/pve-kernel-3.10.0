@@ -322,16 +322,17 @@ ${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE changelog.firmware fwli
 	dpkg-deb --build fwdata ${FW_DEB}
 
 .PHONY: upload
-upload: ${DST_DEB} ${PVE_DEB} ${HDR_DEB} ${FW_DEB}
+upload: ${DST_DEB} # ${PVE_DEB} ${HDR_DEB} ${FW_DEB}
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o rw 
 	mkdir -p /pve/${RELEASE}/extra
 	mkdir -p /pve/${RELEASE}/install
 	rm -rf /pve/${RELEASE}/extra/${PACKAGE}_*.deb
 	rm -rf /pve/${RELEASE}/extra/${HDRPACKAGE}_*.deb
 	rm -rf /pve/${RELEASE}/extra/${PVEPKG}_*.deb
-	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
+#	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
 	rm -rf /pve/${RELEASE}/extra/Packages*
-	cp ${DST_DEB} ${PVE_DEB} ${HDR_DEB} ${FW_DEB} /pve/${RELEASE}/extra
+#	cp ${DST_DEB} ${PVE_DEB} ${HDR_DEB} ${FW_DEB} /pve/${RELEASE}/extra
+	cp ${DST_DEB} /pve/${RELEASE}/extra
 	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
 
