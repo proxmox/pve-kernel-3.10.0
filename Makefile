@@ -65,8 +65,8 @@ HDR_DEB=${HDRPACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 PVEPKG=proxmox-ve-${KERNEL_VER}
 PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 
-all: check_gcc ${DST_DEB} 
-#${PVE_DEB} ${FW_DEB} ${HDR_DEB}
+all: check_gcc ${DST_DEB} ${FW_DEB}
+#${PVE_DEB} ${HDR_DEB}
 
 ${PVE_DEB} pve: proxmox-ve/control proxmox-ve/postinst
 	rm -rf proxmox-ve/data
@@ -329,16 +329,16 @@ upload: ${DST_DEB} # ${PVE_DEB} ${HDR_DEB} ${FW_DEB}
 	rm -rf /pve/${RELEASE}/extra/${PACKAGE}_*.deb
 	rm -rf /pve/${RELEASE}/extra/${HDRPACKAGE}_*.deb
 	rm -rf /pve/${RELEASE}/extra/${PVEPKG}_*.deb
-#	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
+	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
 	rm -rf /pve/${RELEASE}/extra/Packages*
 #	cp ${DST_DEB} ${PVE_DEB} ${HDR_DEB} ${FW_DEB} /pve/${RELEASE}/extra
-	cp ${DST_DEB} /pve/${RELEASE}/extra
+	cp ${DST_DEB} ${FW_DEB} /pve/${RELEASE}/extra
 	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
 
 .PHONY: distclean
 distclean: clean
-	rm -rf linux-firmware.git linux-firmware-from-kernel.git ${KERNEL_SRC}.org ${RHKERSRCDIR}
+	rm -rf linux-firmware.git dvb-firmware.git ${KERNEL_SRC}.org ${RHKERSRCDIR}
 
 .PHONY: clean
 clean:
