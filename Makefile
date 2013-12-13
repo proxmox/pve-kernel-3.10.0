@@ -1,7 +1,7 @@
 RELEASE=3.1
 
 KERNEL_VER=3.10.0
-PKGREL=1
+PKGREL=2
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=1
@@ -135,7 +135,7 @@ data: .compile_mark ${KERNEL_CFG}
 
 ${KERNEL_CFG}: ${KERNEL_CFG_ORG} config-${KERNEL_VER}.diff
 	cp ${KERNEL_CFG_ORG} ${KERNEL_CFG}.new
-	#patch --no-backup ${KERNEL_CFG}.new config-${KERNEL_VER}.diff
+	patch --no-backup ${KERNEL_CFG}.new config-${KERNEL_VER}.diff
 	mv ${KERNEL_CFG}.new ${KERNEL_CFG}
 
 ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
