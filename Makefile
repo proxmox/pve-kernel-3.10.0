@@ -65,22 +65,7 @@ HDR_DEB=${HDRPACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 PVEPKG=proxmox-ve-${KERNEL_VER}
 PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 
-all: check_gcc ${DST_DEB} ${FW_DEB}
-#${PVE_DEB} ${HDR_DEB}
-
-${PVE_DEB} pve: proxmox-ve/control proxmox-ve/postinst
-	rm -rf proxmox-ve/data
-	mkdir -p proxmox-ve/data/DEBIAN
-	mkdir -p proxmox-ve/data/usr/share/doc/${PVEPKG}/
-	install -m 0644 proxmox-ve/proxmox-release\@proxmox.com.pubkey proxmox-ve/data/usr/share/doc/${PVEPKG}
-	sed -e 's/@KVNAME@/${KVNAME}/' -e 's/@KERNEL_VER@/${KERNEL_VER}/' -e 's/@RELEASE@/${RELEASE}/' -e 's/@PKGREL@/${PKGREL}/' <proxmox-ve/control >proxmox-ve/data/DEBIAN/control
-	sed -e 's/@KERNEL_VER@/${KERNEL_VER}/' <proxmox-ve/postinst >proxmox-ve/data/DEBIAN/postinst
-	chmod 0755 proxmox-ve/data/DEBIAN/postinst
-	echo "git clone git://git.proxmox.com/git/pve-kernel-2.6.32.git\\ngit checkout ${GITVERSION}" > proxmox-ve/data/usr/share/doc/${PVEPKG}/SOURCE
-	install -m 0644 proxmox-ve/copyright proxmox-ve/data/usr/share/doc/${PVEPKG}
-	install -m 0644 proxmox-ve/changelog.Debian proxmox-ve/data/usr/share/doc/${PVEPKG}
-	gzip --best proxmox-ve/data/usr/share/doc/${PVEPKG}/changelog.Debian
-	dpkg-deb --build proxmox-ve/data ${PVE_DEB}
+all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 
 check_gcc: 
 	gcc --version|grep "4.7.2" || false
@@ -274,7 +259,7 @@ ${HDR_DEB} hdr: .compile_mark headers-control.in headers-postinst.in
 	chmod 0755 $(headers_tmp)/DEBIAN/postinst
 	install -D -m 644 copyright $(headers_tmp)/usr/share/doc/${HDRPACKAGE}/copyright
 	install -D -m 644 changelog.Debian $(headers_tmp)/usr/share/doc/${HDRPACKAGE}/changelog.Debian
-	echo "git clone git://git.proxmox.com/git/pve-kernel-2.6.32.git\\ngit checkout ${GITVERSION}" > $(headers_tmp)/usr/share/doc/${HDRPACKAGE}/SOURCE
+	echo "git clone git://git.proxmox.com/git/pve-kernel-3.10.0.git\\ngit checkout ${GITVERSION}" > $(headers_tmp)/usr/share/doc/${HDRPACKAGE}/SOURCE
 	gzip -f --best $(headers_tmp)/usr/share/doc/${HDRPACKAGE}/changelog.Debian
 	install -m 0644 ${KERNEL_SRC}/.config $(headers_dir)
 	install -m 0644 ${KERNEL_SRC}/Module.symvers $(headers_dir)
@@ -322,17 +307,15 @@ ${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README
 	dpkg-deb --build fwdata ${FW_DEB}
 
 .PHONY: upload
-upload: ${DST_DEB} # ${PVE_DEB} ${HDR_DEB} ${FW_DEB}
+upload: ${DST_DEB} ${HDR_DEB} ${FW_DEB}
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o rw 
 	mkdir -p /pve/${RELEASE}/extra
 	mkdir -p /pve/${RELEASE}/install
 	rm -rf /pve/${RELEASE}/extra/${PACKAGE}_*.deb
 	rm -rf /pve/${RELEASE}/extra/${HDRPACKAGE}_*.deb
-	rm -rf /pve/${RELEASE}/extra/${PVEPKG}_*.deb
 	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
 	rm -rf /pve/${RELEASE}/extra/Packages*
-#	cp ${DST_DEB} ${PVE_DEB} ${HDR_DEB} ${FW_DEB} /pve/${RELEASE}/extra
-	cp ${DST_DEB} ${FW_DEB} /pve/${RELEASE}/extra
+	cp ${DST_DEB} ${FW_DEB} ${HDR_DEB} /pve/${RELEASE}/extra
 	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
 
