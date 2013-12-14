@@ -1,7 +1,7 @@
 RELEASE=3.1
 
 KERNEL_VER=3.10.0
-PKGREL=2
+PKGREL=3
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=1
@@ -141,6 +141,7 @@ ${KERNEL_CFG}: ${KERNEL_CFG_ORG} config-${KERNEL_VER}.diff
 ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	rm -rf ${KERNEL_SRC}
 	cp -a ${KERNEL_SRC}.org ${KERNEL_SRC}
+	cd ${KERNEL_SRC}; patch -p1 <../net-core-always-propagate-flag-changes.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../bootsplash-3.8.diff
 	#cd ${KERNEL_SRC}; patch -p1 <../${RHKERSRCDIR}/patch-042stab083
 	#cd ${KERNEL_SRC}; patch -p1 <../do-not-use-barrier-on-ext3.patch
