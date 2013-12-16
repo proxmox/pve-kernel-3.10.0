@@ -5,6 +5,8 @@ pve-kernel-3.10.0 (3.10.0-4) unstable; urgency=low
   * add latest igb driver
   
   * add latest ixgbe driver
+  
+  * add latest netxtreme2 drivers
 
  -- Proxmox Support Team <support@proxmox.com>  Mon, 16 Dec 2013 07:25:17 +0100
 
