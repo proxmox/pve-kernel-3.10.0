@@ -57,6 +57,7 @@ ARECASRC=${ARECADIR}.zip
 #RR272XSRC=RR272x_1x-Linux-Src-v1.5-130325-0732.tar.gz
 #RR272XDIR=rr272x_1x-linux-src-v1.5
 
+# this project look dead - no updates since 3 years
 #ISCSITARGETDIR=iscsitarget-1.4.20.2
 #ISCSITARGETSRC=${ISCSITARGETDIR}.tar.gz
 
@@ -89,7 +90,6 @@ fwlist-${KVNAME}: data
 	./find-firmware.pl data/lib/modules/${KVNAME} >fwlist.tmp
 	mv fwlist.tmp $@
 
-# iscsi_trgt.ko megaraid_sas.ko rr272x_1x.ko
 data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
@@ -109,14 +109,10 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/bnx2x/ethernet/broadcom/bnx2x/
 	# install aacraid drivers
 	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
-	## install megaraid_sas driver
-	#install -m 644 megaraid_sas.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/megaraid/
 	## install Highpoint 2710 RAID driver
 	#install -m 644 rr272x_1x.ko -D tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/rr272x_1x/rr272x_1x.ko
 	# install areca driver
 	install -m 644 arcmsr.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/arcmsr/
-	## install iscsitarget module
-	#install -m 644 -D iscsi_trgt.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/iscsi_trgt.ko
 	# remove firmware
 	rm -rf tmp/lib/firmware
 	# strip debug info
@@ -173,13 +169,6 @@ ${RHKERSRCDIR}/kernel.spec: ${KERNELSRCRPM}
 #	make -C ${TOP}/${RR272XDIR}/product/rr272x/linux KERNELDIR=${TOP}/${KERNEL_SRC}
 #	cp ${RR272XDIR}/product/rr272x/linux/$@ .
 
-#megaraid_sas.ko: .compile_mark ${MEGARAID_SRC}
-#	rm -rf ${MEGARAID_DIR}
-#	tar xf ${MEGARAID_SRC}
-#	mkdir -p /lib/modules/${KVNAME}
-#	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
-#	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${MEGARAID_DIR} modules
-#	cp ${MEGARAID_DIR}/megaraid_sas.ko .
 
 aacraid.ko: .compile_mark ${AACRAIDSRC}
 	rm -rf ${AACRAIDDIR}
@@ -313,7 +302,7 @@ distclean: clean
 
 .PHONY: clean
 clean:
-	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} iscsi_trgt.ko ${ISCSITARGETDIR} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} megaraid_sas.ko ${MEGARAID_DIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR}
+	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR}
 
 
 
