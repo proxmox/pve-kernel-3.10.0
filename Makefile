@@ -50,8 +50,8 @@ AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 #MEGARAID_DIR=megaraid_sas-06.600.18.00
 #MEGARAID_SRC=${MEGARAID_DIR}-src.tar.gz
 
-#ARECADIR=arcmsr-1.30.0X.16-20131206
-#ARECASRC=${ARECADIR}.zip
+ARECADIR=arcmsr-1.30.0X.16-20131206
+ARECASRC=${ARECADIR}.zip
 
 #RR272XSRC=RR272x_1x-Linux-Src-v1.5-130325-0732.tar.gz
 #RR272XDIR=rr272x_1x-linux-src-v1.5
@@ -88,8 +88,8 @@ fwlist-${KVNAME}: data
 	./find-firmware.pl data/lib/modules/${KVNAME} >fwlist.tmp
 	mv fwlist.tmp $@
 
-# iscsi_trgt.ko megaraid_sas.ko rr272x_1x.ko arcmsr.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko
+# iscsi_trgt.ko megaraid_sas.ko rr272x_1x.ko
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -113,7 +113,7 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	## install Highpoint 2710 RAID driver
 	#install -m 644 rr272x_1x.ko -D tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/rr272x_1x/rr272x_1x.ko
 	# install areca driver
-	#install -m 644 arcmsr.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/arcmsr/
+	install -m 644 arcmsr.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/arcmsr/
 	## install iscsitarget module
 	#install -m 644 -D iscsi_trgt.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/iscsi_trgt.ko
 	# remove firmware
@@ -221,13 +221,13 @@ bnx2.ko cnic.ko bnx2x.ko: ${BNX2SRC}
 	cd ${BNX2DIR}; make -C bnx2x/src KVER=${KVNAME}
 	cp `find ${BNX2DIR} -name bnx2.ko -o -name cnic.ko -o -name bnx2x.ko` .
 
-#arcmsr.ko: .compile_mark ${ARECASRC}
-#	rm -rf ${ARECADIR}
-#	mkdir ${ARECADIR}; cd ${ARECADIR}; unzip ../${ARECASRC}
-#	mkdir -p /lib/modules/${KVNAME}
-#	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
-#	cd ${ARECADIR}; make -C ${TOP}/${KERNEL_SRC} SUBDIRS=${TOP}/${ARECADIR} modules
-#	cp ${ARECADIR}/arcmsr.ko arcmsr.ko
+arcmsr.ko: .compile_mark ${ARECASRC}
+	rm -rf ${ARECADIR}
+	mkdir ${ARECADIR}; cd ${ARECADIR}; unzip ../${ARECASRC}
+	mkdir -p /lib/modules/${KVNAME}
+	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
+	cd ${ARECADIR}; make -C ${TOP}/${KERNEL_SRC} SUBDIRS=${TOP}/${ARECADIR} modules
+	cp ${ARECADIR}/arcmsr.ko arcmsr.ko
 
 #iscsi_trgt.ko: .compile_mark ${ISCSITARGETSRC}
 #	rm -rf ${ISCSITARGETDIR}
