@@ -53,6 +53,7 @@ AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 ARECADIR=arcmsr-1.30.0X.16-20131206
 ARECASRC=${ARECADIR}.zip
 
+# this one does not compile with newer 3.10 kernels!
 #RR272XSRC=RR272x_1x-Linux-Src-v1.5-130325-0732.tar.gz
 #RR272XDIR=rr272x_1x-linux-src-v1.5
 
