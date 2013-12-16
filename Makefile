@@ -1,7 +1,7 @@
 RELEASE=3.1
 
 KERNEL_VER=3.10.0
-PKGREL=3
+PKGREL=4
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=1
@@ -30,11 +30,8 @@ FW_VER=1.1
 FW_REL=1
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
-#AOEDIR=aoe6-77
-#AOESRC=${AOEDIR}.tar.gz
-
-#E1000EDIR=e1000e-2.5.4
-#E1000ESRC=${E1000EDIR}.tar.gz
+E1000EDIR=e1000e-2.5.4
+E1000ESRC=${E1000EDIR}.tar.gz
 
 #IGBDIR=igb-5.0.6
 #IGBSRC=${IGBDIR}.tar.gz
@@ -89,20 +86,18 @@ fwlist-${KVNAME}: data
 	./find-firmware.pl data/lib/modules/${KVNAME} >fwlist.tmp
 	mv fwlist.tmp $@
 
-# aoe.ko e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko iscsi_trgt.ko aacraid.ko megaraid_sas.ko rr272x_1x.ko arcmsr.ko
-data: .compile_mark ${KERNEL_CFG} 
+# igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko iscsi_trgt.ko aacraid.ko megaraid_sas.ko rr272x_1x.ko arcmsr.ko
+data: .compile_mark ${KERNEL_CFG} e1000e.ko 
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
 	install -m 644 ${KERNEL_SRC}/System.map tmp/boot/System.map-${KVNAME}
 	install -m 644 ${KERNEL_SRC}/arch/x86_64/boot/bzImage tmp/boot/vmlinuz-${KVNAME}
 	cd ${KERNEL_SRC}; make INSTALL_MOD_PATH=../tmp/ modules_install
-	## install latest aoe driver
-	#install -m 644 aoe.ko tmp/lib/modules/${KVNAME}/kernel/drivers/block/aoe/aoe.ko
 	## install latest ixgbe driver
 	#install -m 644 ixgbe.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ixgbe/
-	## install latest e1000e driver
-	#install -m 644 e1000e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/e1000e/
+	# install latest e1000e driver
+	install -m 644 e1000e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/e1000e/
 	## install latest ibg driver
 	#install -m 644 igb.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/igb/
 	## install bnx2 drivers
@@ -193,22 +188,13 @@ ${RHKERSRCDIR}/kernel.spec: ${KERNELSRCRPM}
 #	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${AACRAIDDIR} modules
 #	cp ${AACRAIDDIR}/aacraid.ko .
 
-#aoe.ko aoe: .compile_mark ${AOESRC}
-#	# aoe driver updates
-#	rm -rf ${AOEDIR} aoe.ko
-#	tar xf ${AOESRC}
-#	mkdir -p /lib/modules/${KVNAME}
-#	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
-#	cd ${AOEDIR}; make KVER=${KVNAME}
-#	cp ${AOEDIR}/linux/drivers/block/aoe/aoe.ko aoe.ko
-
-#e1000e.ko e1000e: .compile_mark ${E1000ESRC}
-#	rm -rf ${E1000EDIR}
-#	tar xf ${E1000ESRC}
-#	mkdir -p /lib/modules/${KVNAME}
-#	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
-#	cd ${E1000EDIR}/src; make BUILD_KERNEL=${KVNAME}
-#	cp ${E1000EDIR}/src/e1000e.ko e1000e.ko
+e1000e.ko e1000e: .compile_mark ${E1000ESRC}
+	rm -rf ${E1000EDIR}
+	tar xf ${E1000ESRC}
+	mkdir -p /lib/modules/${KVNAME}
+	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
+	cd ${E1000EDIR}/src; make BUILD_KERNEL=${KVNAME}
+	cp ${E1000EDIR}/src/e1000e.ko e1000e.ko
 
 #igb.ko igb: .compile_mark ${IGBSRC}
 #	rm -rf ${IGBDIR}
