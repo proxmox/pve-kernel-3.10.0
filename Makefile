@@ -42,8 +42,9 @@ IXGBESRC=${IXGBEDIR}.tar.gz
 BNX2DIR=netxtreme2-7.8.56
 BNX2SRC=${BNX2DIR}.tar.gz
 
-#AACRAIDSRC=aacraid-1.2.1-30300.src.rpm
-#AACRAIDDIR=aacraid-1.2.1
+AACRAIDVER=1.2.1-40300
+AACRAIDDIR=aacraid-${AACRAIDVER}.src
+AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 
 #MEGARAID_DIR=megaraid_sas-06.600.18.00
 #MEGARAID_SRC=${MEGARAID_DIR}-src.tar.gz
@@ -86,8 +87,8 @@ fwlist-${KVNAME}: data
 	./find-firmware.pl data/lib/modules/${KVNAME} >fwlist.tmp
 	mv fwlist.tmp $@
 
-# iscsi_trgt.ko aacraid.ko megaraid_sas.ko rr272x_1x.ko arcmsr.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko
+# iscsi_trgt.ko megaraid_sas.ko rr272x_1x.ko arcmsr.ko
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -104,8 +105,8 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/
 	install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/
 	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/bnx2x/
-	## install aacraid drivers
-	#install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
+	# install aacraid drivers
+	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
 	## install megaraid_sas driver
 	#install -m 644 megaraid_sas.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/megaraid/
 	## install Highpoint 2710 RAID driver
@@ -178,15 +179,13 @@ ${RHKERSRCDIR}/kernel.spec: ${KERNELSRCRPM}
 #	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${MEGARAID_DIR} modules
 #	cp ${MEGARAID_DIR}/megaraid_sas.ko .
 
-#aacraid.ko: .compile_mark ${AACRAIDSRC}
-#	rm -rf ${AACRAIDDIR}
-#	mkdir ${AACRAIDDIR}
-#	cd ${AACRAIDDIR};rpm2cpio ../${AACRAIDSRC} |cpio -i
-#	cd ${AACRAIDDIR};tar xzf aacraid_source.tgz	
-#	mkdir -p /lib/modules/${KVNAME}
-#	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
-#	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${AACRAIDDIR} modules
-#	cp ${AACRAIDDIR}/aacraid.ko .
+aacraid.ko: .compile_mark ${AACRAIDSRC}
+	rm -rf ${AACRAIDDIR}
+	tar xzf ${AACRAIDSRC}
+	mkdir -p /lib/modules/${KVNAME}
+	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
+	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${AACRAIDDIR}/aacraid_source modules
+	cp ${AACRAIDDIR}/aacraid_source/aacraid.ko .
 
 e1000e.ko e1000e: .compile_mark ${E1000ESRC}
 	rm -rf ${E1000EDIR}
