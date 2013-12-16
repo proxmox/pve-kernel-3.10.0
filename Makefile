@@ -46,6 +46,7 @@ AACRAIDVER=1.2.1-40300
 AACRAIDDIR=aacraid-${AACRAIDVER}.src
 AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 
+# kernel contains newer version 06.700.06.00-rc1
 #MEGARAID_DIR=megaraid_sas-06.600.18.00
 #MEGARAID_SRC=${MEGARAID_DIR}-src.tar.gz
 
@@ -96,15 +97,15 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	install -m 644 ${KERNEL_SRC}/arch/x86_64/boot/bzImage tmp/boot/vmlinuz-${KVNAME}
 	cd ${KERNEL_SRC}; make INSTALL_MOD_PATH=../tmp/ modules_install
 	# install latest ixgbe driver
-	install -m 644 ixgbe.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ixgbe/
+	install -m 644 ixgbe.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/ixgbe/
 	# install latest e1000e driver
-	install -m 644 e1000e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/e1000e/
+	install -m 644 e1000e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/e1000e/
 	# install latest ibg driver
-	install -m 644 igb.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/igb/
+	install -m 644 igb.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/igb/
 	# install bnx2 drivers
-	install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/
-	install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/
-	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/bnx2x/
+	install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/bnx2x/ethernet/broadcom/bnx2x/
 	# install aacraid drivers
 	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
 	## install megaraid_sas driver
