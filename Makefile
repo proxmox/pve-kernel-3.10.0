@@ -139,7 +139,7 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../bootsplash-3.8.diff
 	#cd ${KERNEL_SRC}; patch -p1 <../${RHKERSRCDIR}/patch-042stab083
 	#cd ${KERNEL_SRC}; patch -p1 <../do-not-use-barrier-on-ext3.patch
-	#cd ${KERNEL_SRC}; patch -p1 <../bridge-patch.diff
+	cd ${KERNEL_SRC}; patch -p1 <../bridge-patch.diff
 	#cd ${KERNEL_SRC}; patch -p1 <../kvm-fix-invalid-secondary-exec-controls.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-aspm-policy.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kbuild-generate-mudules-builtin.patch
