@@ -1,3 +1,13 @@
+pve-kernel-3.10.0 (3.10.0-5) unstable; urgency=low
+
+  * set CONFIG_BRIDGE=y
+  
+  * disable module signatures
+  
+  * re-add patch bridge-patch.diff
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 17 Dec 2013 12:06:42 +0100
+
 pve-kernel-3.10.0 (3.10.0-4) unstable; urgency=low
 
   * add latest e1000e driver
