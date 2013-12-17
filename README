@@ -1,0 +1,116 @@
+KERNEL SOURCE:
+==============
+
+We use the RHEL7 kernel sources, available from:
+
+ftp://ftp.redhat.com/redhat/rhel/
+
+
+Additional/Updated Modules:
+---------------------------
+
+- include latest ixgbe driver from intel/sourceforge
+
+- include latest igb driver from intel/sourceforge
+
+- include latest e1000e driver from intel/sourceforge
+
+- include latest Broadcom bnx2 drivers
+
+  * original file linux-7.8.56.zip contains
+    netxtreme2-7.8.56.tar.gz (added to repository)
+
+- include latest Adaptec aacraid driver
+
+  * http://download.adaptec.com/raid/aac/linux/aacraid-linux-src-1.2.1-40300.tgz
+
+- include latest ARECA RAID drivers
+
+  * http://www.areca.com.tw/support/s_linux/linux.htm
+
+FIRMWARE:
+=========
+
+We create our own firmware package, which includes the firmware for
+all proxmox-ve kernels. So far this include
+
+pve-kernel-2.6.18
+pve-kernel-2.6.24
+pve-kernel-2.6.32
+pve-kernel-2.6.35
+pve-kernel-3.10.0
+
+We use 'find-firmware.pl' to extract lists of required firmeware
+files.  The script 'assemble-firmware.pl' is used to read those lists
+and copy the files from various source directory into a target
+directory.
+
+We do not include firmeware for some wireless HW when there is a
+separate debian package for that, for example:
+
+zd1211-firmware
+atmel-firmware
+bluez-firmware 
+
+
+PATCHES:
+--------
+
+ bridge-patch.diff: Avoid bridge problems with changing MAC
+  see also: http://forum.openvz.org/index.php?t=msg&th=5291
+
+  Behaviour after 2.6.27 has changed slighly - after setting mac address
+  of bridge device, then address won't change. So we could omit
+  that patch, requiring to set hwaddress in /etc/network/interfaces.
+
+
+Additional information
+----------------------
+
+We use the default configuration provided by RHEL, and apply
+the following modification:
+
+see config-3.10.0.diff
+
+- enable common CONFIG_BLK_DEV_XXX to avoid hardware detection
+  problems (udev, undate-initramfs hav serious problems without that)
+
+  	 CONFIG_BLK_DEV_SD=y
+  	 CONFIG_BLK_DEV_SR=y
+  	 CONFIG_BLK_DEV_DM=y
+
+- disable module signatures (CONFIG_MODULE_SIG)
+ 
+- enable IBM JFS file system 
+
+  This is disabled in RHEL kernel for no real reason, so we enable
+  it as requested by users (bug #64)
+
+- enable apple HFS and HFSPLUS
+
+  This is disabled in RHEL kernel for no real reason, so we enable
+  it as requested by users
+
+- enable CONFIG_BRIDGE=y
+
+  Else we get warnings on boot, that
+  net.bridge.bridge-nf-call-iptables is an unknown key
+
+# Note: enable now for testing
+#- disable CONFIG_BRIDGE_IGMP_SNOOPING 
+#
+# To avoid problems with multicasting. Various users reported
+#  multipath problems, which can be avoided by turning off IGMP
+# snooping.
+
+# deadline is default anyways now
+#- use 'deadline' as default scheduler
+#
+#  This is the suggested setting for KVM. We also measure bad fsync
+#  performance with ext4 and cfq.
+
+Testing final kernel with kvm
+-----------------------------
+
+kvm -kernel data/boot/vmlinuz-3.10.0-1-pve -initrd initrd.img-3.10.0-1-pve -append "vga=791 video=vesafb:ywrap,mtrr" /dev/zero
+
