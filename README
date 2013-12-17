@@ -96,6 +96,10 @@ see config-3.10.0.diff
   Else we get warnings on boot, that
   net.bridge.bridge-nf-call-iptables is an unknown key
 
+- disable CONFIG_DEFAULT_SECURITY_SELINUX
+
+  Use same SELINUX config as debian kernels (CONFIG_DEFAULT_SECURITY_DAC=y)
+
 # Note: enable now for testing
 #- disable CONFIG_BRIDGE_IGMP_SNOOPING 
 #
