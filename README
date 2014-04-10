@@ -100,6 +100,13 @@ see config-3.10.0.diff
 
   Use same SELINUX config as debian kernels (CONFIG_DEFAULT_SECURITY_DAC=y)
 
+- set CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+
+  because if not set, it can give some dynamic memory or cpu frequencies 
+  change, and vms can crash (mainly windows guest).
+
+  see http://forum.proxmox.com/threads/18238-Windows-7-x64-VMs-crashing-randomly-during-process-termination?p=93273#post93273
+
 # Note: enable now for testing
 #- disable CONFIG_BRIDGE_IGMP_SNOOPING 
 #

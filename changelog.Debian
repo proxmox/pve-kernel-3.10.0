@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-6) unstable; urgency=low
+
+  * set CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+  
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 10 Apr 2014 08:39:31 +0200
+
 pve-kernel-3.10.0 (3.10.0-5) unstable; urgency=low
 
   * set CONFIG_BRIDGE=y
