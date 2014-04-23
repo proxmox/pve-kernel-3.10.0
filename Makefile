@@ -1,12 +1,12 @@
 RELEASE=3.1
 
 KERNEL_VER=3.10.0
-PKGREL=6
+PKGREL=7
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=1
+KREL=2
 
-RHKVER=54.0.1.el7
+RHKVER=121.el7
 
 KERNELSRCRPM=kernel-${KERNEL_VER}-${RHKVER}.src.rpm
 
@@ -69,7 +69,7 @@ PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 
 check_gcc: 
-	gcc --version|grep "4.7.2" || false
+	gcc --version|grep "4\.7\.2" || false
 
 ${DST_DEB}: data control.in postinst.in copyright changelog.Debian
 	mkdir -p data/DEBIAN
@@ -135,7 +135,6 @@ ${KERNEL_CFG}: ${KERNEL_CFG_ORG} config-${KERNEL_VER}.diff
 ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	rm -rf ${KERNEL_SRC}
 	cp -a ${KERNEL_SRC}.org ${KERNEL_SRC}
-	cd ${KERNEL_SRC}; patch -p1 <../net-core-always-propagate-flag-changes.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../bootsplash-3.8.diff
 	#cd ${KERNEL_SRC}; patch -p1 <../${RHKERSRCDIR}/patch-042stab083
 	#cd ${KERNEL_SRC}; patch -p1 <../do-not-use-barrier-on-ext3.patch

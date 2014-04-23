@@ -107,6 +107,10 @@ see config-3.10.0.diff
 
   see http://forum.proxmox.com/threads/18238-Windows-7-x64-VMs-crashing-randomly-during-process-termination?p=93273#post93273
 
+- set CONFIG_CC_STACKPROTECTOR_REGULAR=y
+
+  gcc on debian wheezy does not supportCONFIG_CC_STACKPROTECTOR_STRONG
+ 
 # Note: enable now for testing
 #- disable CONFIG_BRIDGE_IGMP_SNOOPING 
 #
@@ -123,5 +127,5 @@ see config-3.10.0.diff
 Testing final kernel with kvm
 -----------------------------
 
-kvm -kernel data/boot/vmlinuz-3.10.0-1-pve -initrd initrd.img-3.10.0-1-pve -append "vga=791 video=vesafb:ywrap,mtrr" /dev/zero
+kvm -kernel data/boot/vmlinuz-3.10.0-2-pve -initrd initrd.img-3.10.0-2-pve -append "vga=791 video=vesafb:ywrap,mtrr" /dev/zero
 

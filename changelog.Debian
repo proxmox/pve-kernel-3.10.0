@@ -1,3 +1,13 @@
+pve-kernel-3.10.0 (3.10.0-7) unstable; urgency=low
+
+  * update to kernel-3.10.0-121.el7.src.rpm
+  
+  * remove net-core-always-propagate-flag-changes.patch (upstream)
+  
+  * bump kernal version to 3.10.0-2-pve
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 23 Apr 2014 09:13:18 +0200
+
 pve-kernel-3.10.0 (3.10.0-6) unstable; urgency=low
 
   * set CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
