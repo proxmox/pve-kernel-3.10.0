@@ -15,10 +15,11 @@ Additional/Updated Modules:
 
 - include latest e1000e driver from intel/sourceforge
 
-- include latest Broadcom bnx2 drivers
-
-  * original file linux-7.8.56.zip contains
-    netxtreme2-7.8.56.tar.gz (added to repository)
+# this driver does not compile with RHEL7 kernel
+#- include latest Broadcom bnx2 drivers
+#
+#  * original file linux-7.8.56.zip contains
+#    netxtreme2-7.8.56.tar.gz (added to repository)
 
 - include latest Adaptec aacraid driver
 

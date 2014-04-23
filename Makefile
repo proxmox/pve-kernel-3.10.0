@@ -1,4 +1,4 @@
-RELEASE=3.1
+RELEASE=3.2
 
 KERNEL_VER=3.10.0
 PKGREL=7
@@ -27,18 +27,19 @@ KERNEL_CFG=config-${KERNEL_VER}
 KERNEL_CFG_ORG=${RHKERSRCDIR}/kernel-${KERNEL_VER}-x86_64.config
 
 FW_VER=1.1
-FW_REL=2
+FW_REL=3
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
-E1000EDIR=e1000e-2.5.4
+E1000EDIR=e1000e-3.0.4.1
 E1000ESRC=${E1000EDIR}.tar.gz
 
-IGBDIR=igb-5.0.6
+IGBDIR=igb-5.1.2
 IGBSRC=${IGBDIR}.tar.gz
 
-IXGBEDIR=ixgbe-3.18.7
+IXGBEDIR=ixgbe-3.19.1
 IXGBESRC=${IXGBEDIR}.tar.gz
 
+# this does not compile correctly
 BNX2DIR=netxtreme2-7.8.56
 BNX2SRC=${BNX2DIR}.tar.gz
 
@@ -90,7 +91,8 @@ fwlist-${KVNAME}: data
 	./find-firmware.pl data/lib/modules/${KVNAME} >fwlist.tmp
 	mv fwlist.tmp $@
 
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko
+# fixme: bnx2.ko cnic.ko bnx2x.ko
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko aacraid.ko arcmsr.ko
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -103,10 +105,10 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	install -m 644 e1000e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/e1000e/
 	# install latest ibg driver
 	install -m 644 igb.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/igb/
-	# install bnx2 drivers
-	install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
-	install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
-	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
+	## install bnx2 drivers
+	#install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	#install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	#install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
 	# install aacraid drivers
 	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
 	## install Highpoint 2710 RAID driver

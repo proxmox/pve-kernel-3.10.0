@@ -5,6 +5,14 @@ pve-kernel-3.10.0 (3.10.0-7) unstable; urgency=low
   * remove net-core-always-propagate-flag-changes.patch (upstream)
   
   * bump kernal version to 3.10.0-2-pve
+  
+  * use bnx2 from upstream (Broadcom bnx2 drivers does not compile)
+  
+  * update e1000e to 3.0.4.1
+  
+  * update igb to 5.1.2
+  
+  * update ixgbe to 3.19.1
 
  -- Proxmox Support Team <support@proxmox.com>  Wed, 23 Apr 2014 09:13:18 +0200
 
