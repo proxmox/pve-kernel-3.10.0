@@ -99,6 +99,8 @@ see config-3.10.0.diff
   This is disabled in RHEL kernel for no real reason, so we enable
   it as requested by users
 
+- enable CONFIG_BCACHE=m (requested by user)
+
 - enable CONFIG_BRIDGE=y
 
   Else we get warnings on boot, that
