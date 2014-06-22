@@ -1,5 +1,5 @@
---- rh-kernel-src/kernel-3.10.0-x86_64.config	2014-04-23 09:14:23.000000000 +0200
-+++ linux-2.6-3.10.0/.config	2014-05-02 06:04:37.000000000 +0200
+--- rh-kernel-src/kernel-3.10.0-x86_64.config	2014-06-13 09:32:05.616074844 +0200
++++ linux-2.6-3.10.0/.config	2014-06-22 15:01:45.753338384 +0200
 @@ -1,7 +1,6 @@
 -# x86_64
  #
@@ -135,6 +135,15 @@
  CONFIG_DM_DEBUG=y
  CONFIG_DM_BUFIO=m
  CONFIG_DM_BIO_PRISON=m
+@@ -4326,7 +4322,7 @@
+ CONFIG_VFIO_IOMMU_TYPE1=m
+ CONFIG_VFIO=m
+ CONFIG_VFIO_PCI=m
+-# CONFIG_VFIO_PCI_VGA is not set
++CONFIG_VFIO_PCI_VGA=y
+ # CONFIG_VIRT_DRIVERS is not set
+ CONFIG_VIRTIO=m
+ 
 @@ -4542,7 +4538,11 @@
  # CONFIG_JBD2_DEBUG is not set
  CONFIG_FS_MBCACHE=m
