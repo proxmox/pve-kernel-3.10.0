@@ -1,0 +1,43 @@
+From: Stefan Priebe <s.priebe@profihost.ag>
+To: <pve-devel@pve.proxmox.com>
+Date: Sat, 21 Jun 2014 19:46:19 +0200
+
+This patch adds netpoll "support" to veth. As veth is a virtual device there is no need to support netpoll. We just need
+to tell the kernel veth supports it to have netpoll support on bridging while veth devices are assigned.
+
+An example is the netconsole driver on a bridge.
+
+Signed-off-by: Stefan Priebe <s.priebe@profihost.ag>
+---
+ drivers/net/veth.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 177f911..5de0771 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -188,6 +188,12 @@ static struct rtnl_link_stats64 *veth_get_stats64(struct net_device *dev,
+ 	return tot;
+ }
+ 
++#ifdef CONFIG_NET_POLL_CONTROLLER
++static void veth_poll_controller(struct net_device *dev)
++{
++}
++#endif
++
+ static int veth_open(struct net_device *dev)
+ {
+ 	struct veth_priv *priv = netdev_priv(dev);
+@@ -251,6 +257,9 @@ static const struct net_device_ops veth_netdev_ops = {
+ 	.ndo_change_mtu      = veth_change_mtu,
+ 	.ndo_get_stats64     = veth_get_stats64,
+ 	.ndo_set_mac_address = eth_mac_addr,
++#ifdef CONFIG_NET_POLL_CONTROLLER
++        .ndo_poll_controller    = veth_poll_controller,
++#endif
+ };
+ 
+ #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_ALL_TSO |    \
+-- 
+1.7.10.4
