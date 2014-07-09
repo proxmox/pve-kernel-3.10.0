@@ -70,7 +70,11 @@ PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 
 check_gcc: 
+ifeq    ($(CC), cc)
 	gcc --version|grep "4\.7\.2" || false
+else
+	$(CC) --version|grep "4\.7" || false
+endif
 
 ${DST_DEB}: data control.in postinst.in copyright changelog.Debian
 	mkdir -p data/DEBIAN
