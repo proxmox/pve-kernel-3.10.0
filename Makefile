@@ -69,6 +69,11 @@ PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 
 all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 
+.PHONY: download
+download:
+	rm ${KERNELSRCRPM}
+	wget http://vault.centos.org/7.0.1406/os/Source/SPackages/${KERNELSRCRPM}
+
 check_gcc: 
 ifeq    ($(CC), cc)
 	gcc --version|grep "4\.7\.2" || false
