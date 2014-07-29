@@ -1,7 +1,7 @@
 RELEASE=3.2
 
 KERNEL_VER=3.10.0
-PKGREL=11
+PKGREL=12
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=3
@@ -81,11 +81,13 @@ else
 	$(CC) --version|grep "4\.7" || false
 endif
 
-${DST_DEB}: data control.in postinst.in copyright changelog.Debian
+${DST_DEB}: data control.in postinst.in postrm.in copyright changelog.Debian
 	mkdir -p data/DEBIAN
 	sed -e 's/@KERNEL_VER@/${KERNEL_VER}/' -e 's/@KVNAME@/${KVNAME}/' -e 's/@PKGREL@/${PKGREL}/' <control.in >data/DEBIAN/control
 	sed -e 's/@@KVNAME@@/${KVNAME}/g'  <postinst.in >data/DEBIAN/postinst
 	chmod 0755 data/DEBIAN/postinst
+	sed -e 's/@@KVNAME@@/${KVNAME}/g'  <postrm.in >data/DEBIAN/postrm
+	chmod 0755 data/DEBIAN/postrm
 	install -D -m 644 copyright data/usr/share/doc/${PACKAGE}/copyright
 	install -D -m 644 changelog.Debian data/usr/share/doc/${PACKAGE}/changelog.Debian
 	echo "git clone git://git.proxmox.com/git/pve-kernel-3.2.0.git\\ngit checkout ${GITVERSION}" > data/usr/share/doc/${PACKAGE}/SOURCE
