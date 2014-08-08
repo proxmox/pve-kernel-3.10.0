@@ -1,10 +1,10 @@
 RELEASE=3.2
 
 KERNEL_VER=3.10.0
-PKGREL=13
+PKGREL=14
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=3
+KREL=4
 
 RHKVER=123.el7
 
@@ -30,28 +30,27 @@ FW_VER=1.1
 FW_REL=3
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
-E1000EDIR=e1000e-3.0.4.1
+E1000EDIR=e1000e-3.1.0.2
 E1000ESRC=${E1000EDIR}.tar.gz
 
-IGBDIR=igb-5.1.2
+IGBDIR=igb-5.2.9.4
 IGBSRC=${IGBDIR}.tar.gz
 
-IXGBEDIR=ixgbe-3.19.1
+IXGBEDIR=ixgbe-3.21.2
 IXGBESRC=${IXGBEDIR}.tar.gz
 
-# this does not compile correctly
-BNX2DIR=netxtreme2-7.8.56
+BNX2DIR=netxtreme2-7.10.14
 BNX2SRC=${BNX2DIR}.tar.gz
 
-AACRAIDVER=1.2.1-40300
+AACRAIDVER=1.2.1-40700
 AACRAIDDIR=aacraid-${AACRAIDVER}.src
 AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 
-# kernel contains newer version 06.700.06.00-rc1
-#MEGARAID_DIR=megaraid_sas-06.600.18.00
+# driver does not compile
+#MEGARAID_DIR=megaraid_sas-06.703.11.00
 #MEGARAID_SRC=${MEGARAID_DIR}-src.tar.gz
 
-ARECADIR=arcmsr-1.30.0X.16-20131206
+ARECADIR=arcmsr-1.30.0X.19-140509
 ARECASRC=${ARECADIR}.zip
 
 # this one does not compile with newer 3.10 kernels!
@@ -103,7 +102,7 @@ fwlist-${KVNAME}: data
 	mv fwlist.tmp $@
 
 # fixme: bnx2.ko cnic.ko bnx2x.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko aacraid.ko arcmsr.ko
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -117,11 +116,13 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko aacraid.ko arcmsr.ko
 	# install latest ibg driver
 	install -m 644 igb.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/igb/
 	## install bnx2 drivers
-	#install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
-	#install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
-	#install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
+	install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
 	# install aacraid drivers
 	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
+	# install megaraid_sas driver
+	# install -m 644 megaraid_sas.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/megaraid/
 	## install Highpoint 2710 RAID driver
 	#install -m 644 rr272x_1x.ko -D tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/rr272x_1x/rr272x_1x.ko
 	# install areca driver
@@ -183,14 +184,16 @@ ${RHKERSRCDIR}/kernel.spec: ${KERNELSRCRPM}
 #	make -C ${TOP}/${RR272XDIR}/product/rr272x/linux KERNELDIR=${TOP}/${KERNEL_SRC}
 #	cp ${RR272XDIR}/product/rr272x/linux/$@ .
 
-
 aacraid.ko: .compile_mark ${AACRAIDSRC}
 	rm -rf ${AACRAIDDIR}
-	tar xzf ${AACRAIDSRC}
+	mkdir ${AACRAIDDIR}
+	cd ${AACRAIDDIR};tar xzf ../${AACRAIDSRC}
+	cd ${AACRAIDDIR};rpm2cpio aacraid-${AACRAIDVER}.src.rpm|cpio -i
+	cd ${AACRAIDDIR};tar xf aacraid_source.tgz
 	mkdir -p /lib/modules/${KVNAME}
 	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
-	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${AACRAIDDIR}/aacraid_source modules
-	cp ${AACRAIDDIR}/aacraid_source/aacraid.ko .
+	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${AACRAIDDIR} modules
+	cp ${AACRAIDDIR}/aacraid.ko .
 
 e1000e.ko e1000e: .compile_mark ${E1000ESRC}
 	rm -rf ${E1000EDIR}
@@ -272,7 +275,7 @@ dvb-firmware.git/README:
 linux-firmware.git/WHENCE:
 	git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git linux-firmware.git
 
-${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README changelog.firmware fwlist-2.6.18-2-pve fwlist-2.6.24-12-pve fwlist-2.6.32-3-pve fwlist-2.6.32-4-pve fwlist-2.6.32-6-pve fwlist-2.6.35-1-pve fwlist-2.6.32-13-pve fwlist-2.6.32-14-pve fwlist-2.6.32-20-pve fwlist-2.6.32-21-pve fwlist-${KVNAME}
+${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README changelog.firmware fwlist-2.6.18-2-pve fwlist-2.6.24-12-pve fwlist-2.6.32-3-pve fwlist-2.6.32-4-pve fwlist-2.6.32-6-pve fwlist-2.6.35-1-pve fwlist-2.6.32-13-pve fwlist-2.6.32-14-pve fwlist-2.6.32-20-pve fwlist-2.6.32-21-pve fwlist-3.10.0-3-pve fwlist-${KVNAME}
 	rm -rf fwdata
 	mkdir -p fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-${KVNAME} fwdata/lib/firmware
@@ -287,6 +290,7 @@ ${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README
 	./assemble-firmware.pl fwlist-2.6.32-14-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-20-pve fwdata/lib/firmware
 	./assemble-firmware.pl fwlist-2.6.32-21-pve fwdata/lib/firmware
+	./assemble-firmware.pl fwlist-3.10.0-3-pve fwdata/lib/firmware
 	install -d fwdata/usr/share/doc/pve-firmware
 	cp linux-firmware.git/WHENCE fwdata/usr/share/doc/pve-firmware/README
 	install -d fwdata/usr/share/doc/pve-firmware/licenses

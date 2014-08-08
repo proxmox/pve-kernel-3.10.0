@@ -1,3 +1,17 @@
+pve-kernel-3.10.0 (3.10.0-14) unstable; urgency=low
+
+  * update e1000e to 3.1.0.2
+  
+  * update igb to 5.2.9.4
+  
+  * update ixgbe to 3.21.2
+  
+  * update netxtreme2 to 7.10.14
+  
+  * update arcmsr to 1.30.0X.19-140509
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 08 Aug 2014 08:01:28 +0200
+
 pve-kernel-3.10.0 (3.10.0-13) unstable; urgency=low
 
   * recompile to enable vfio xfga
