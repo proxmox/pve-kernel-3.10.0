@@ -161,6 +161,7 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-idr-header-for-drbd-compilation.patch
 	cd ${KERNEL_SRC}; patch -p1 <../n_tty-Fix-n_tty_write-crash-when-echoing-in-raw-mode.patch
 	cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
+	cd ${KERNEL_SRC}; patch -p1 <../override_for_missing_acs_capabilities.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 
