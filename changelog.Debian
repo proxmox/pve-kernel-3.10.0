@@ -1,3 +1,10 @@
+pve-kernel-3.10.0 (3.10.0-15) unstable; urgency=low
+
+  * gpu passthrough: add override_for_missing_acs_capabilities.patch,
+    needed for some radeon cards.
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 11 Aug 2014 07:53:41 +0200
+
 pve-kernel-3.10.0 (3.10.0-14) unstable; urgency=low
 
   * update e1000e to 3.1.0.2
