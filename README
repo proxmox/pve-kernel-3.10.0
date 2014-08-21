@@ -1,9 +1,9 @@
 KERNEL SOURCE:
 ==============
 
-We use the RHEL7 kernel sources, available from:
+We use the CENTOS7/RHEL7 kernel sources, available from:
 
-ftp://ftp.redhat.com/redhat/rhel/
+http://vault.centos.org/
 
 
 Additional/Updated Modules:
@@ -15,11 +15,10 @@ Additional/Updated Modules:
 
 - include latest e1000e driver from intel/sourceforge
 
-# this driver does not compile with RHEL7 kernel
-#- include latest Broadcom bnx2 drivers
-#
-#  * original file linux-7.8.56.zip contains
-#    netxtreme2-7.8.56.tar.gz (added to repository)
+ include latest Broadcom bnx2 drivers: http://driverdownloads.qlogic.com/
+
+  * original file linux-7.10.14.zip contains
+    netxtreme2-7.10.14.tar.gz (added to repository)
 
 - include latest Adaptec aacraid driver
 

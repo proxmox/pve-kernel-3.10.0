@@ -1,12 +1,12 @@
 RELEASE=3.2
 
 KERNEL_VER=3.10.0
-PKGREL=15
+PKGREL=16
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=4
 
-RHKVER=123.el7
+RHKVER=123.6.3.el7
 
 KERNELSRCRPM=kernel-${KERNEL_VER}-${RHKVER}.src.rpm
 
@@ -70,8 +70,9 @@ all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 
 .PHONY: download
 download:
-	rm ${KERNELSRCRPM}
-	wget http://vault.centos.org/7.0.1406/os/Source/SPackages/${KERNELSRCRPM}
+	rm -f ${KERNELSRCRPM}
+	#wget http://vault.centos.org/7.0.1406/os/Source/SPackages/${KERNELSRCRPM}
+	wget http://vault.centos.org/7.0.1406/updates/Source/SPackages/${KERNELSRCRPM}
 
 check_gcc: 
 ifeq    ($(CC), cc)
@@ -159,7 +160,6 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../add-tiocgdev-ioctl.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-nfs-block-count.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-idr-header-for-drbd-compilation.patch
-	cd ${KERNEL_SRC}; patch -p1 <../n_tty-Fix-n_tty_write-crash-when-echoing-in-raw-mode.patch
 	cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
 	cd ${KERNEL_SRC}; patch -p1 <../override_for_missing_acs_capabilities.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'

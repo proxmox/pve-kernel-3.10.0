@@ -1,3 +1,12 @@
+pve-kernel-3.10.0 (3.10.0-16) unstable; urgency=low
+
+  * update to kernel-3.10.0-123.6.3.el7.src.rpm
+  
+  * remove patch n_tty-Fix-n_tty_write-crash-when-echoing-in-raw-mode.patch 
+    (now upstream)
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 21 Aug 2014 08:46:54 +0200
+
 pve-kernel-3.10.0 (3.10.0-15) unstable; urgency=low
 
   * gpu passthrough: add override_for_missing_acs_capabilities.patch,
