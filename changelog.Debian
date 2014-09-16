@@ -1,3 +1,10 @@
+pve-kernel-3.10.0 (3.10.0-18) unstable; urgency=low
+
+  * tg3: Fix deadlock in tg3_change_mtu 
+    (patch tg3-fix-deadlock_in_tg3_change_mtu.patch)
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 16 Sep 2014 07:35:33 +0200
+
 pve-kernel-3.10.0 (3.10.0-17) unstable; urgency=low
 
   * allow grub-efi-ia32 boot loader

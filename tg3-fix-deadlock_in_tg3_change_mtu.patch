@@ -1,0 +1,82 @@
+From patchwork Wed Feb 26 12:23:50 2014
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: [3.11.y.z, extended,
+ stable] Patch "tg3: Fix deadlock in tg3_change_mtu()" has been added
+ to staging queue
+From: Luis Henriques <luis.henriques@canonical.com>
+Date: Wed, 26 Feb 2014 12:23:50 +0000
+
+This is a note to let you know that I have just added a patch titled
+
+    tg3: Fix deadlock in tg3_change_mtu()
+
+to the linux-3.11.y-queue branch of the 3.11.y.z extended stable tree 
+which can be found at:
+
+ http://kernel.ubuntu.com/git?p=ubuntu/linux.git;a=shortlog;h=refs/heads/linux-3.11.y-queue
+
+If you, or anyone else, feels it should not be added to this tree, please 
+reply to this email.
+
+For more information about the 3.11.y.z tree, see
+https://wiki.ubuntu.com/Kernel/Dev/ExtendedStable
+
+Thanks.
+-Luis
+
+------
+
+>From e4075c63a28b56215afce0dee915a036a14baeab Mon Sep 17 00:00:00 2001
+From: Nithin Sujir <nsujir@broadcom.com>
+Date: Thu, 6 Feb 2014 14:13:05 -0800
+Subject: tg3: Fix deadlock in tg3_change_mtu()
+
+commit c6993dfd7db9b0c6b7ca7503a56fda9236a4710f upstream.
+
+Quoting David Vrabel -
+"5780 cards cannot have jumbo frames and TSO enabled together.  When
+jumbo frames are enabled by setting the MTU, the TSO feature must be
+cleared.  This is done indirectly by calling netdev_update_features()
+which will call tg3_fix_features() to actually clear the flags.
+
+netdev_update_features() will also trigger a new netlink message for the
+feature change event which will result in a call to tg3_get_stats64()
+which deadlocks on the tg3 lock."
+
+tg3_set_mtu() does not need to be under the tg3 lock since converting
+the flags to use set_bit(). Move it out to after tg3_netif_stop().
+
+Reported-by: David Vrabel <david.vrabel@citrix.com>
+Tested-by: David Vrabel <david.vrabel@citrix.com>
+Signed-off-by: Michael Chan <mchan@broadcom.com>
+Signed-off-by: Nithin Nayak Sujir <nsujir@broadcom.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Luis Henriques <luis.henriques@canonical.com>
+---
+ drivers/net/ethernet/broadcom/tg3.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--
+1.9.0
+
+diff --git a/drivers/net/ethernet/broadcom/tg3.c b/drivers/net/ethernet/broadcom/tg3.c
+index f9aec90..849b141 100644
+--- a/drivers/net/ethernet/broadcom/tg3.c
++++ b/drivers/net/ethernet/broadcom/tg3.c
+@@ -13907,12 +13907,12 @@ static int tg3_change_mtu(struct net_device *dev, int new_mtu)
+
+ 	tg3_netif_stop(tp);
+
++	tg3_set_mtu(dev, tp, new_mtu);
++
+ 	tg3_full_lock(tp, 1);
+
+ 	tg3_halt(tp, RESET_KIND_SHUTDOWN, 1);
+
+-	tg3_set_mtu(dev, tp, new_mtu);
+-
+ 	/* Reset PHY, otherwise the read DMA engine will be in a mode that
+ 	 * breaks all requests to 256 bytes.
+ 	 */

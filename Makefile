@@ -1,7 +1,7 @@
 RELEASE=3.2
 
 KERNEL_VER=3.10.0
-PKGREL=17
+PKGREL=18
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=4
@@ -162,6 +162,7 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-idr-header-for-drbd-compilation.patch
 	cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
 	cd ${KERNEL_SRC}; patch -p1 <../override_for_missing_acs_capabilities.patch
+	cd ${KERNEL_SRC}; patch -p1 <../tg3-fix-deadlock_in_tg3_change_mtu.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 
