@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-19) unstable; urgency=low
+
+  * update to kernel-3.10.0-123.8.1.el7.src.rpm
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 15 Oct 2014 07:35:13 +0200
+
 pve-kernel-3.10.0 (3.10.0-18) unstable; urgency=low
 
   * tg3: Fix deadlock in tg3_change_mtu 
