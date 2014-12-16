@@ -72,6 +72,8 @@ the following modification:
 
 see config-3.10.0.diff
 
+- enable CONFIG_CEPH_FS=m (request from user)
+
 - enable common CONFIG_BLK_DEV_XXX to avoid hardware detection
   problems (udev, undate-initramfs hav serious problems without that)
 
