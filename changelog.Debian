@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-24) unstable; urgency=low
+
+  * update to kernel kernel-3.10.0-123.13.2.el7.src.rpm 
+
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 27 Dec 2014 09:31:58 +0100
+
 pve-kernel-3.10.0 (3.10.0-23) unstable; urgency=low
 
   * update igb to 5.2.15
