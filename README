@@ -28,6 +28,13 @@ Additional/Updated Modules:
 
   * http://www.areca.com.tw/support/s_linux/linux.htm
 
+- include native OpenZFS filesystem kernel modules for Linux
+
+  * https://github.com/zfsonlinux/
+
+  For licensing questions, see: http://open-zfs.org/wiki/Talk:FAQ
+
+
 FIRMWARE:
 =========
 
