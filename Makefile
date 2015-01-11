@@ -1,7 +1,7 @@
 RELEASE=3.3
 
 KERNEL_VER=3.10.0
-PKGREL=24
+PKGREL=25
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=6
@@ -61,6 +61,14 @@ ARECASRC=${ARECADIR}.zip
 #ISCSITARGETDIR=iscsitarget-1.4.20.2
 #ISCSITARGETSRC=${ISCSITARGETDIR}.tar.gz
 
+ZFSVER=0.6.3-1.2
+SPLDIR=spl-spl-${ZFSVER}
+SPLSRC=spl-${ZFSVER}.tar.gz
+ZFSDIR=zfs-zfs-${ZFSVER}
+ZFSSRC=zfs-${ZFSVER}.tar.gz
+ZFS_MODULES=zfs.ko zavl.ko znvpair.ko zunicode.ko zcommon.ko zpios.ko
+SPL_MODULES=spl.ko splat.ko
+
 DST_DEB=${PACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 HDR_DEB=${HDRPACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 PVEPKG=proxmox-ve-${KERNEL_VER}
@@ -81,9 +89,11 @@ else
 	$(CC) --version|grep "4\.7" || false
 endif
 
-${DST_DEB}: data control.in postinst.in postrm.in copyright changelog.Debian
+${DST_DEB}: data control.in prerm.in postinst.in postrm.in copyright changelog.Debian
 	mkdir -p data/DEBIAN
 	sed -e 's/@KERNEL_VER@/${KERNEL_VER}/' -e 's/@KVNAME@/${KVNAME}/' -e 's/@PKGREL@/${PKGREL}/' <control.in >data/DEBIAN/control
+	sed -e 's/@@KVNAME@@/${KVNAME}/g'  <prerm.in >data/DEBIAN/prerm
+	chmod 0755 data/DEBIAN/prerm
 	sed -e 's/@@KVNAME@@/${KVNAME}/g'  <postinst.in >data/DEBIAN/postinst
 	chmod 0755 data/DEBIAN/postinst
 	sed -e 's/@@KVNAME@@/${KVNAME}/g'  <postrm.in >data/DEBIAN/postrm
@@ -103,7 +113,7 @@ fwlist-${KVNAME}: data
 	mv fwlist.tmp $@
 
 # fixme: bnx2.ko cnic.ko bnx2x.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko ${SPL_MODULES} ${ZFS_MODULES}
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -128,6 +138,9 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	#install -m 644 rr272x_1x.ko -D tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/rr272x_1x/rr272x_1x.ko
 	# install areca driver
 	install -m 644 arcmsr.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/arcmsr/
+	# install zfs drivers
+	install -d -m 0755 tmp/lib/modules/${KVNAME}/zfs
+	install -m 644 ${SPL_MODULES} ${ZFS_MODULES} tmp/lib/modules/${KVNAME}/zfs
 	# remove firmware
 	rm -rf tmp/lib/firmware
 	# strip debug info
@@ -238,6 +251,29 @@ arcmsr.ko: .compile_mark ${ARECASRC}
 	cd ${ARECADIR}; make -C ${TOP}/${KERNEL_SRC} SUBDIRS=${TOP}/${ARECADIR} modules
 	cp ${ARECADIR}/arcmsr.ko arcmsr.ko
 
+${SPL_MODULES}: .compile_mark ${SPLSRC}
+	rm -rf ${SPLDIR}
+	tar xf ${SPLSRC}
+	cd ${SPLDIR}; ./autogen.sh
+	cd ${SPLDIR}; ./configure --with-config=kernel --with-linux=${TOP}/${KERNEL_SRC} --with-linux-obj=${TOP}/${KERNEL_SRC}
+	cd ${SPLDIR}; make
+	cp ${SPLDIR}/module/spl/spl.ko spl.ko
+	cp ${SPLDIR}/module/splat/splat.ko splat.ko
+
+${ZFS_MODULES}: .compile_mark ${ZFSSRC}
+	rm -rf ${ZFSDIR}
+	tar xf ${ZFSSRC}
+	cd ${ZFSDIR}; ./autogen.sh
+	cd ${ZFSDIR}; ./configure --with-config=kernel --with-linux=${TOP}/${KERNEL_SRC} --with-linux-obj=${TOP}/${KERNEL_SRC}
+	cd ${ZFSDIR}; make
+	cp ${ZFSDIR}/module/zfs/zfs.ko zfs.ko
+	cp ${ZFSDIR}/module/avl/zavl.ko zavl.ko
+	cp ${ZFSDIR}/module/nvpair/znvpair.ko znvpair.ko
+	cp ${ZFSDIR}/module/unicode/zunicode.ko zunicode.ko
+	cp ${ZFSDIR}/module/zcommon/zcommon.ko zcommon.ko
+	cp ${ZFSDIR}/module/zpios/zpios.ko zpios.ko
+
+
 #iscsi_trgt.ko: .compile_mark ${ISCSITARGETSRC}
 #	rm -rf ${ISCSITARGETDIR}
 #	tar xf ${ISCSITARGETSRC}
@@ -323,7 +359,8 @@ distclean: clean
 
 .PHONY: clean
 clean:
-	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR}
+	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR} ${ZFSDIR} ${SPLDIR} ${SPL_MODULES} ${ZFS_MODULES}
+
 
 
 

@@ -14,10 +14,12 @@ my $version = "@@KVNAME@@";
 
 system("depmod $version");
 
-system("update-initramfs -c -t -b $imagedir -k $version"); 
-
-if (-x "/usr/sbin/update-grub") {
-    system("/usr/sbin/update-grub");
+if (-d "/etc/kernel/postinst.d") {
+  print STDERR "Examining /etc/kernel/postinst.d.\n";
+  system ("run-parts --verbose --exit-on-error --arg=$version " .
+          "--arg=$imagedir/vmlinuz-$version " .
+          "/etc/kernel/postinst.d") &&
+            die "Failed to process /etc/kernel/postinst.d";
 }
 
 exit 0

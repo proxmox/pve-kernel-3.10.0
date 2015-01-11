@@ -9,6 +9,14 @@ my $imagedir = "/boot";
 
 my $version = "@@KVNAME@@";
 
+if (-d "/etc/kernel/postrm.d") {
+  print STDERR "Examining /etc/kernel/postrm.d.\n";
+  system ("run-parts --verbose --exit-on-error --arg=$version " .
+          "--arg=$imagedir/vmlinuz-$version " .
+          "/etc/kernel/postrm.d") &&
+            die "Failed to process /etc/kernel/postrm.d";
+}
+
 unlink "$imagedir/initrd.img-$version";
 unlink "$imagedir/initrd.img-$version.bak";
 unlink "/var/lib/initramfs-tools/$version";
