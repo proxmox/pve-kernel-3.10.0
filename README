@@ -34,6 +34,10 @@ Additional/Updated Modules:
 
   For licensing questions, see: http://open-zfs.org/wiki/Talk:FAQ
 
+- include latest HPSA driver (HP Smart Array)
+
+  * http://sourceforge.net/projects/cciss/
+
 
 FIRMWARE:
 =========

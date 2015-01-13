@@ -46,6 +46,10 @@ AACRAIDVER=1.2.1-40700
 AACRAIDDIR=aacraid-${AACRAIDVER}.src
 AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 
+HPSAVER=3.4.6
+HPSADIR=hpsa-${HPSAVER}
+HPSASRC=${HPSADIR}-170.tar.bz2
+
 # driver does not compile
 #MEGARAID_DIR=megaraid_sas-06.703.11.00
 #MEGARAID_SRC=${MEGARAID_DIR}-src.tar.gz
@@ -113,7 +117,7 @@ fwlist-${KVNAME}: data
 	mv fwlist.tmp $@
 
 # fixme: bnx2.ko cnic.ko bnx2x.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko ${SPL_MODULES} ${ZFS_MODULES}
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES}
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -132,6 +136,8 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2
 	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
 	# install aacraid drivers
 	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
+	# install hpsa driver
+	install -m 644 hpsa.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/
 	# install megaraid_sas driver
 	# install -m 644 megaraid_sas.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/megaraid/
 	## install Highpoint 2710 RAID driver
@@ -209,6 +215,15 @@ aacraid.ko: .compile_mark ${AACRAIDSRC}
 	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
 	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${AACRAIDDIR} modules
 	cp ${AACRAIDDIR}/aacraid.ko .
+
+hpsa.ko hpsa: .compile_mark ${HPSASRC}
+	rm -rf ${HPSADIR}
+	tar xf ${HPSASRC}
+	sed -i ${HPSADIR}/drivers/scsi/hpsa_kernel_compat.h -e 's/^\/\* #define RHEL7.*/#define RHEL7/'
+	mkdir -p /lib/modules/${KVNAME}
+	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
+	make -C ${TOP}/${KERNEL_SRC} M=${TOP}/${HPSADIR}/drivers/scsi modules
+	cp ${HPSADIR}/drivers/scsi/hpsa.ko hpsa.ko
 
 e1000e.ko e1000e: .compile_mark ${E1000ESRC}
 	rm -rf ${E1000EDIR}
