@@ -264,7 +264,7 @@ ${ZFS_MODULES}: .compile_mark ${ZFSSRC}
 	rm -rf ${ZFSDIR}
 	tar xf ${ZFSSRC}
 	cd ${ZFSDIR}; ./autogen.sh
-	cd ${ZFSDIR}; ./configure --with-config=kernel --with-linux=${TOP}/${KERNEL_SRC} --with-linux-obj=${TOP}/${KERNEL_SRC}
+	cd ${ZFSDIR}; ./configure --with-spl=${TOP}/${SPLDIR} --with-spl-obj=${TOP}/${SPLDIR} --with-config=kernel --with-linux=${TOP}/${KERNEL_SRC} --with-linux-obj=${TOP}/${KERNEL_SRC}
 	cd ${ZFSDIR}; make
 	cp ${ZFSDIR}/module/zfs/zfs.ko zfs.ko
 	cp ${ZFSDIR}/module/avl/zavl.ko zavl.ko
