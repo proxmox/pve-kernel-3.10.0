@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-26) unstable; urgency=low
+
+  * update hpsa module
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 13 Jan 2015 17:32:17 +0100
+
 pve-kernel-3.10.0 (3.10.0-25) unstable; urgency=low
 
   * add zfs modules
