@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-27) unstable; urgency=low
+
+  * enable vhost-scsi module
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 22 Jan 2015 10:57:12 +0100
+
 pve-kernel-3.10.0 (3.10.0-26) unstable; urgency=low
 
   * update hpsa module
