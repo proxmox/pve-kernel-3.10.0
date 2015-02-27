@@ -128,7 +128,7 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic
 	install -m 644 ${KERNEL_SRC}/arch/x86_64/boot/bzImage tmp/boot/vmlinuz-${KVNAME}
 	cd ${KERNEL_SRC}; make INSTALL_MOD_PATH=../tmp/ modules_install
 	# install latest i40e driver
-	install -m 644 i40e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/i40e/
+	install -m 644 i40e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/i40e/
 	# install latest ixgbe driver
 	install -m 644 ixgbe.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/ixgbe/
 	# install latest e1000e driver
