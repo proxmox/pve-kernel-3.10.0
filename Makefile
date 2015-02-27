@@ -39,6 +39,9 @@ IGBSRC=${IGBDIR}.tar.gz
 IXGBEDIR=ixgbe-3.23.2
 IXGBESRC=${IXGBEDIR}.tar.gz
 
+I40EDIR=i40e-1.2.37
+I40ESRC=${I40EDIR}.tar.gz
+
 BNX2DIR=netxtreme2-7.11.05
 BNX2SRC=${BNX2DIR}.tar.gz
 
@@ -117,13 +120,15 @@ fwlist-${KVNAME}: data
 	mv fwlist.tmp $@
 
 # fixme: bnx2.ko cnic.ko bnx2x.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES}
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES}
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
 	install -m 644 ${KERNEL_SRC}/System.map tmp/boot/System.map-${KVNAME}
 	install -m 644 ${KERNEL_SRC}/arch/x86_64/boot/bzImage tmp/boot/vmlinuz-${KVNAME}
 	cd ${KERNEL_SRC}; make INSTALL_MOD_PATH=../tmp/ modules_install
+	# install latest i40e driver
+	install -m 644 i40e.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/i40e/
 	# install latest ixgbe driver
 	install -m 644 ixgbe.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/ixgbe/
 	# install latest e1000e driver
@@ -248,6 +253,14 @@ ixgbe.ko ixgbe: .compile_mark ${IXGBESRC}
 	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
 	cd ${IXGBEDIR}/src; make CFLAGS_EXTRA="-DIXGBE_NO_LRO" BUILD_KERNEL=${KVNAME}
 	cp ${IXGBEDIR}/src/ixgbe.ko ixgbe.ko
+
+i40e.ko i40e: .compile_mark ${I40ESRC}
+	rm -rf ${I40EDIR}
+	tar xf ${I40ESRC}
+	mkdir -p /lib/modules/${KVNAME}
+	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
+	cd ${I40EDIR}/src; make BUILD_KERNEL=${KVNAME}
+	cp ${I40EDIR}/src/i40e.ko i40e.ko
 
 bnx2.ko cnic.ko bnx2x.ko: ${BNX2SRC}
 	rm -rf ${BNX2DIR}
@@ -374,7 +387,7 @@ distclean: clean
 
 .PHONY: clean
 clean:
-	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR} ${ZFSDIR} ${SPLDIR} ${SPL_MODULES} ${ZFS_MODULES} hpsa.ko ${HPSADIR}
+	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${I40EDIR} ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR} ${ZFSDIR} ${SPLDIR} ${SPL_MODULES} ${ZFS_MODULES} hpsa.ko ${HPSADIR}
 
 
 

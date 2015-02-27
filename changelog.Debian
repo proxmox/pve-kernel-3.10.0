@@ -2,6 +2,8 @@ pve-kernel-3.10.0 (3.10.0-28) unstable; urgency=low
 
   * update to kernel-3.10.0-123.20.1.el7.src.rpm
 
+  * add latest Intel(R) Ethernet Connection XL710 Network Driver (i40e)
+
  -- Proxmox Support Team <support@proxmox.com>  Fri, 27 Feb 2015 06:01:27 +0100
 
 pve-kernel-3.10.0 (3.10.0-27) unstable; urgency=low
