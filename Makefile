@@ -1,4 +1,4 @@
-RELEASE=3.4
+RELEASE=4.0
 
 KERNEL_VER=3.10.0
 PKGREL=29
@@ -81,7 +81,21 @@ HDR_DEB=${HDRPACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 PVEPKG=proxmox-ve-${KERNEL_VER}
 PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 
-all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
+all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB} ${PVE_DEB}
+
+${PVE_DEB} pve: proxmox-ve/control proxmox-ve/postinst
+	rm -rf proxmox-ve/data
+	mkdir -p proxmox-ve/data/DEBIAN
+	mkdir -p proxmox-ve/data/usr/share/doc/${PVEPKG}/
+	install -m 0644 proxmox-ve/proxmox-release\@proxmox.com.pubkey proxmox-ve/data/usr/share/doc/${PVEPKG}
+	sed -e 's/@KVNAME@/${KVNAME}/' -e 's/@KERNEL_VER@/${KERNEL_VER}/' -e 's/@RELEASE@/${RELEASE}/' -e 's/@PKGREL@/${PKGREL}/' <proxmox-ve/control >proxmox-ve/data/DEBIAN/control
+	sed -e 's/@KERNEL_VER@/${KERNEL_VER}/' <proxmox-ve/postinst >proxmox-ve/data/DEBIAN/postinst
+	chmod 0755 proxmox-ve/data/DEBIAN/postinst
+	echo "git clone git://git.proxmox.com/git/pve-kernel-3.10.0.git\\ngit checkout ${GITVERSION}" > proxmox-ve/data/usr/share/doc/${PVEPKG}/SOURCE
+	install -m 0644 proxmox-ve/copyright proxmox-ve/data/usr/share/doc/${PVEPKG}
+	install -m 0644 proxmox-ve/changelog.Debian proxmox-ve/data/usr/share/doc/${PVEPKG}
+	gzip --best proxmox-ve/data/usr/share/doc/${PVEPKG}/changelog.Debian
+	dpkg-deb --build proxmox-ve/data ${PVE_DEB}
 
 .PHONY: download
 download:
@@ -91,9 +105,9 @@ download:
 
 check_gcc: 
 ifeq    ($(CC), cc)
-	gcc --version|grep "4\.7\.2" || false
+	gcc --version|grep "4\.9" || false
 else
-	$(CC) --version|grep "4\.7" || false
+	$(CC) --version|grep "4\.9" || false
 endif
 
 ${DST_DEB}: data control.in prerm.in postinst.in postrm.in copyright changelog.Debian
@@ -371,15 +385,16 @@ ${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README
 	dpkg-deb --build fwdata ${FW_DEB}
 
 .PHONY: upload
-upload: ${DST_DEB} ${HDR_DEB} ${FW_DEB}
+upload: ${DST_DEB} ${HDR_DEB} ${FW_DEB} ${PVE_DEB} 
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o rw 
 	mkdir -p /pve/${RELEASE}/extra
 	mkdir -p /pve/${RELEASE}/install
 	rm -rf /pve/${RELEASE}/extra/${PACKAGE}_*.deb
 	rm -rf /pve/${RELEASE}/extra/${HDRPACKAGE}_*.deb
+	rm -rf /pve/${RELEASE}/extra/${PVEPKG}_*.deb
 	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
 	rm -rf /pve/${RELEASE}/extra/Packages*
-	cp ${DST_DEB} ${FW_DEB} ${HDR_DEB} /pve/${RELEASE}/extra
+	cp ${DST_DEB} ${FW_DEB} ${HDR_DEB} ${PVE_DEB} /pve/${RELEASE}/extra
 	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
 
