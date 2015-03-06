@@ -2,6 +2,8 @@ pve-kernel-3.10.0 (3.10.0-29) unstable; urgency=low
 
   * IPv6: forwaring ICMP6 neighbor solicitation on bridge
 
+  * vhost-net: extend device allocation to vmalloc
+  
  -- Proxmox Support Team <support@proxmox.com>  Fri, 06 Mar 2015 07:09:19 +0100
 
 pve-kernel-3.10.0 (3.10.0-28) unstable; urgency=low
