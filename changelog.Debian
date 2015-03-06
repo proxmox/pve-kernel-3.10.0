@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-29) unstable; urgency=low
+
+  * IPv6: forwaring ICMP6 neighbor solicitation on bridge
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 06 Mar 2015 07:09:19 +0100
+
 pve-kernel-3.10.0 (3.10.0-28) unstable; urgency=low
 
   * update to kernel-3.10.0-123.20.1.el7.src.rpm

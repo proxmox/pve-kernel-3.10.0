@@ -1,7 +1,7 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=28
+PKGREL=29
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=7
@@ -178,6 +178,7 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../${RHKERSRCDIR}/patch-042stab083
 	#cd ${KERNEL_SRC}; patch -p1 <../do-not-use-barrier-on-ext3.patch
 	cd ${KERNEL_SRC}; patch -p1 <../bridge-patch.diff
+	cd ${KERNEL_SRC}; patch -p1 <../bridge-forward-ipv6-neighbor-solicitation.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kvm-fix-invalid-secondary-exec-controls.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-aspm-policy.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kbuild-generate-mudules-builtin.patch

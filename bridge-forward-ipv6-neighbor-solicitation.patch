@@ -1,0 +1,17 @@
+see http://forum.proxmox.com/threads/21218-Proxmox-VE-IPv6-Problems
+
+patch from http://patchwork.ozlabs.org/patch/326048/
+
+--- linux-2.6-2.6.32/net/bridge/br_multicast.c.org	2015-03-06 06:57:00.000000000 +0100
++++ linux-2.6-2.6.32/net/bridge/br_multicast.c	2015-03-06 06:57:35.000000000 +0100
+@@ -1433,8 +1433,8 @@ static int br_multicast_ipv6_rcv(struct
+ 		return 0;
+ 
+ 	/* Prevent flooding this packet if there is no listener present */
+-	if (!ipv6_addr_is_ll_all_nodes(&ip6h->daddr))
+-		BR_INPUT_SKB_CB(skb)->mrouters_only = 1;
++/*	if (!ipv6_addr_is_ll_all_nodes(&ip6h->daddr))
++        BR_INPUT_SKB_CB(skb)->mrouters_only = 1;*/
+ 
+ 	if (ip6h->nexthdr != IPPROTO_HOPOPTS ||
+ 	    ip6h->payload_len == 0)
