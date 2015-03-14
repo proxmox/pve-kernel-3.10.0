@@ -5,6 +5,10 @@ We use the CENTOS7/RHEL7 kernel sources, available from:
 
 http://vault.centos.org/
 
+or
+
+http://oss.oracle.com/ol7/SRPMS-updates/
+
 
 Additional/Updated Modules:
 ---------------------------
