@@ -1,3 +1,11 @@
+pve-kernel-3.10.0 (3.10.0-30) unstable; urgency=medium
+
+  * update to kernel-3.10.0-229.el7.src.rpm
+  
+  * remove tg3-fix-deadlock_in_tg3_change_mtu.patch (now upstream)
+
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 14 Mar 2015 10:32:36 +0100
+
 pve-kernel-3.10.0 (3.10.0-29) unstable; urgency=low
 
   * IPv6: forwaring ICMP6 neighbor solicitation on bridge
