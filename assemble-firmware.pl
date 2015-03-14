@@ -35,6 +35,17 @@ brcm/brcmfmac-sdio.txt
 brcm/brcmfmac-sdio.bin
 brcm/brcmfmac43242a.bin
 brcm/brcmfmac43143.bin
+brcm/brcmfmac4354-sdio.txt
+brcm/brcmfmac4339-sdio.txt
+brcm/brcmfmac4339-sdio.bin
+brcm/brcmfmac43362-sdio.txt
+brcm/brcmfmac4335-sdio.txt
+brcm/brcmfmac4334-sdio.txt
+brcm/brcmfmac4330-sdio.txt
+brcm/brcmfmac4329-sdio.txt
+brcm/brcmfmac43241b4-sdio.txt
+brcm/brcmfmac43241b0-sdio.txt
+brcm/brcmfmac43143-sdio.txt
 ct2fw-3.1.0.0.bin
 ctfw-3.1.0.0.bin 
 cbfw-3.1.0.0.bin
@@ -134,8 +145,11 @@ iwlwifi-6000g2a-6.ucode
 iwlwifi-130-5.ucode
 iwlwifi-100-6.ucode
 iwlwifi-1000-6.ucode
+iwlwifi-8000-8.ucode
 cxgb4/t4fw.bin
 cxgb4/t4fw-1.3.10.0.bin
+
+ast_dp501_fw.bin
 
 )) {
     $skip->{$fw} = 1;
