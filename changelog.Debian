@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-31) unstable; urgency=medium
+
+  * include latest DRBD 9.0 driver
+
+ -- Proxmox Support Team <support@proxmox.com>  Tue, 17 Mar 2015 16:10:00 +0100
+
 pve-kernel-3.10.0 (3.10.0-30) unstable; urgency=medium
 
   * update to kernel-3.10.0-229.el7.src.rpm
