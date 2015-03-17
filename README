@@ -42,6 +42,8 @@ Additional/Updated Modules:
 
   * http://sourceforge.net/projects/cciss/
 
+- include latest DRBD 9 driver, see http://drbd.linbit.com/home/what-is-drbd/
+
 
 FIRMWARE:
 =========

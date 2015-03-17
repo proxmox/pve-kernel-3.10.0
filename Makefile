@@ -76,6 +76,12 @@ ZFSSRC=zfs-${ZFSVER}.tar.gz
 ZFS_MODULES=zfs.ko zavl.ko znvpair.ko zunicode.ko zcommon.ko zpios.ko
 SPL_MODULES=spl.ko splat.ko
 
+# DRBD9
+DRBDVER=9.0.0rc2
+DRBDDIR=drbd-${DRBDVER}
+DRBDSRC=${DRBDDIR}.tar.gz
+DRBD_MODULES=drbd.ko drbd_transport_tcp.ko
+
 DST_DEB=${PACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 HDR_DEB=${HDRPACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 PVEPKG=proxmox-ve-${KERNEL_VER}
@@ -134,7 +140,7 @@ fwlist-${KVNAME}: data
 	mv fwlist.tmp $@
 
 # fixme: bnx2.ko cnic.ko bnx2x.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES}
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES} ${DRBD_MODULES}
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -166,6 +172,8 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic
 	# install zfs drivers
 	install -d -m 0755 tmp/lib/modules/${KVNAME}/zfs
 	install -m 644 ${SPL_MODULES} ${ZFS_MODULES} tmp/lib/modules/${KVNAME}/zfs
+	# install drbd9
+	install -m 644 ${DRBD_MODULES} tmp/lib/modules/${KVNAME}/kernel/drivers/block/drbd
 	# remove firmware
 	rm -rf tmp/lib/firmware
 	# strip debug info
@@ -316,6 +324,22 @@ ${ZFS_MODULES}: .compile_mark ${ZFSSRC}
 	cp ${ZFSDIR}/module/zcommon/zcommon.ko zcommon.ko
 	cp ${ZFSDIR}/module/zpios/zpios.ko zpios.ko
 
+.PHONY: update-drbd
+update-drbd:
+	rm -rf ${DRBDDIR} ${DRBDSRC} drbd-9.0
+	git clone --recursive git://git.drbd.org/drbd-9.0
+	cd drbd-9.0; make tarball
+	mv drbd-9.0/${DRBDSRC} ${DRBDSRC} 
+
+.PHONY: drbd
+drbd ${DRBD_MODULES}: .compile_mark ${DRBDSRC}
+	rm -rf ${DRBDDIR}
+	tar xzf ${DRBDSRC}
+	mkdir -p /lib/modules/${KVNAME}
+	ln -sf ${TOP}/${KERNEL_SRC} /lib/modules/${KVNAME}/build
+	cd ${DRBDDIR}; make KVER=${KVNAME}
+	mv ${DRBDDIR}/drbd/drbd.ko drbd.ko
+	mv ${DRBDDIR}/drbd/drbd_transport_tcp.ko drbd_transport_tcp.ko
 
 #iscsi_trgt.ko: .compile_mark ${ISCSITARGETSRC}
 #	rm -rf ${ISCSITARGETDIR}
@@ -403,7 +427,7 @@ distclean: clean
 
 .PHONY: clean
 clean:
-	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${I40EDIR} ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR} ${ZFSDIR} ${SPLDIR} ${SPL_MODULES} ${ZFS_MODULES} hpsa.ko ${HPSADIR}
+	rm -rf *~ .compile_mark ${KERNEL_CFG} ${KERNEL_SRC} tmp data proxmox-ve/data *.deb ${AOEDIR} aoe.ko ${headers_tmp} fwdata fwlist.tmp *.ko ${I40EDIR} ${IXGBEDIR} ${E1000EDIR} e1000e.ko ${IGBDIR} igb.ko fwlist-${KVNAME} ${BNX2DIR} bnx2.ko cnic.ko bnx2x.ko aacraid.ko ${AACRAIDDIR} rr272x_1x.ko ${RR272XDIR} ${ARECADIR}.ko ${ARECADIR} ${ZFSDIR} ${SPLDIR} ${SPL_MODULES} ${ZFS_MODULES} hpsa.ko ${HPSADIR} ${DRBDDIR} drbd-9.0
 
 
 
