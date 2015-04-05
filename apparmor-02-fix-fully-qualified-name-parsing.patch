@@ -1,0 +1,35 @@
+From 2654bfbc2bd0e1e64f0b257c21da23f6cec32c6c Mon Sep 17 00:00:00 2001
+From: John Johansen <john.johansen@canonical.com>
+Date: Wed, 27 Feb 2013 03:45:05 -0800
+Subject: apparmor: fix fully qualified name parsing
+
+currently apparmor name parsing is only correctly handling
+:<NS>:<profile>
+
+but
+:<NS>://<profile>
+
+is also a valid form and what is exported to userspace.
+
+Signed-off-by: John Johansen <john.johansen@canonical.com>
+
+diff --git a/security/apparmor/lib.c b/security/apparmor/lib.c
+index d6e1f21..d40bc59 100644
+--- a/security/apparmor/lib.c
++++ b/security/apparmor/lib.c
+@@ -45,8 +45,10 @@ char *aa_split_fqname(char *fqname, char **ns_name)
+ 		*ns_name = skip_spaces(&name[1]);
+ 		if (split) {
+ 			/* overwrite ':' with \0 */
+-			*split = 0;
+-			name = skip_spaces(split + 1);
++			*split++ = 0;
++			if (strncmp(split, "//", 2) == 0)
++				split += 2;
++			name = skip_spaces(split);
+ 		} else
+ 			/* a ns name without a following profile is allowed */
+ 			name = NULL;
+-- 
+cgit v0.10.2
+

@@ -1,0 +1,109 @@
+From 0ca554b9fca425eb58325a36290deef698cef34b Mon Sep 17 00:00:00 2001
+From: John Johansen <john.johansen@canonical.com>
+Date: Mon, 18 Feb 2013 16:04:34 -0800
+Subject: apparmor: add kvzalloc to handle zeroing for kvmalloc
+
+Signed-off-by: John Johansen <john.johansen@canonical.com>
+Acked-by: Steve Beattie <sbeattie@ubuntu.com>
+
+diff --git a/security/apparmor/include/apparmor.h b/security/apparmor/include/apparmor.h
+index 40aedd9..1ba2ca5 100644
+--- a/security/apparmor/include/apparmor.h
++++ b/security/apparmor/include/apparmor.h
+@@ -15,6 +15,7 @@
+ #ifndef __APPARMOR_H
+ #define __APPARMOR_H
+ 
++#include <linux/slab.h>
+ #include <linux/fs.h>
+ 
+ #include "match.h"
+@@ -64,9 +65,18 @@ extern int apparmor_initialized __initdata;
+ /* fn's in lib */
+ char *aa_split_fqname(char *args, char **ns_name);
+ void aa_info_message(const char *str);
+-void *kvmalloc(size_t size);
++void *__aa_kvmalloc(size_t size, gfp_t flags);
+ void kvfree(void *buffer);
+ 
++static inline void *kvmalloc(size_t size)
++{
++	return __aa_kvmalloc(size, 0);
++}
++
++static inline void *kvzalloc(size_t size)
++{
++	return __aa_kvmalloc(size, __GFP_ZERO);
++}
+ 
+ /**
+  * aa_strneq - compare null terminated @str to a non null terminated substring
+diff --git a/security/apparmor/lib.c b/security/apparmor/lib.c
+index 7430298..d6e1f21 100644
+--- a/security/apparmor/lib.c
++++ b/security/apparmor/lib.c
+@@ -75,15 +75,16 @@ void aa_info_message(const char *str)
+ }
+ 
+ /**
+- * kvmalloc - do allocation preferring kmalloc but falling back to vmalloc
+- * @size: size of allocation
++ * __aa_kvmalloc - do allocation preferring kmalloc but falling back to vmalloc
++ * @size: how many bytes of memory are required
++ * @flags: the type of memory to allocate (see kmalloc).
+  *
+  * Return: allocated buffer or NULL if failed
+  *
+  * It is possible that policy being loaded from the user is larger than
+  * what can be allocated by kmalloc, in those cases fall back to vmalloc.
+  */
+-void *kvmalloc(size_t size)
++void *__aa_kvmalloc(size_t size, gfp_t flags)
+ {
+ 	void *buffer = NULL;
+ 
+@@ -92,14 +93,17 @@ void *kvmalloc(size_t size)
+ 
+ 	/* do not attempt kmalloc if we need more than 16 pages at once */
+ 	if (size <= (16*PAGE_SIZE))
+-		buffer = kmalloc(size, GFP_NOIO | __GFP_NOWARN);
++		buffer = kmalloc(size, flags | GFP_NOIO | __GFP_NOWARN);
+ 	if (!buffer) {
+ 		/* see kvfree for why size must be at least work_struct size
+ 		 * when allocated via vmalloc
+ 		 */
+ 		if (size < sizeof(struct work_struct))
+ 			size = sizeof(struct work_struct);
+-		buffer = vmalloc(size);
++		if (flags & __GFP_ZERO)
++			buffer = vzalloc(size);
++		else
++			buffer = vmalloc(size);
+ 	}
+ 	return buffer;
+ }
+diff --git a/security/apparmor/match.c b/security/apparmor/match.c
+index 90971a8..dfd25a9 100644
+--- a/security/apparmor/match.c
++++ b/security/apparmor/match.c
+@@ -30,7 +30,7 @@
+  *
+  * Returns: pointer to table else NULL on failure
+  *
+- * NOTE: must be freed by kvfree (not kmalloc)
++ * NOTE: must be freed by kvfree (not kfree)
+  */
+ static struct table_header *unpack_table(char *blob, size_t bsize)
+ {
+@@ -57,7 +57,7 @@ static struct table_header *unpack_table(char *blob, size_t bsize)
+ 	if (bsize < tsize)
+ 		goto out;
+ 
+-	table = kvmalloc(tsize);
++	table = kvzalloc(tsize);
+ 	if (table) {
+ 		*table = th;
+ 		if (th.td_flags == YYTD_DATA8)
+-- 
+cgit v0.10.2
+

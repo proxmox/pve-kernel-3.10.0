@@ -1,7 +1,7 @@
 RELEASE=4.0
 
 KERNEL_VER=3.10.0
-PKGREL=31
+PKGREL=32
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=8
@@ -210,6 +210,11 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
 	cd ${KERNEL_SRC}; patch -p1 <../override_for_missing_acs_capabilities.patch
 	cd ${KERNEL_SRC}; patch -p1 <../vhost-net-extend-device-allocation-to-vmalloc.patch
+	cd ${KERNEL_SRC}; patch -p1 <../apparmor-01-add-kvzalloc-to-handle-zeroing-for-kvmalloc.patch 
+	cd ${KERNEL_SRC}; patch -p1 <../apparmor-02-fix-fully-qualified-name-parsing.patch 
+	cd ${KERNEL_SRC}; patch -p1 <../apparmor-03-no-need-to-delay-vfree.patch
+	cd ${KERNEL_SRC}; patch -p1 <../apparmor-04-remove-minimum-size-check-for-vmalloc.patch
+	cd ${KERNEL_SRC}; patch -p1 <../apparmor-05-nick-kvfree-from-apparmor.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 

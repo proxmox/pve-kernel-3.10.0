@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-32) unstable; urgency=medium
+
+  * use apparmor as default security module
+
+ -- Proxmox Support Team <support@proxmox.com>  Sun, 05 Apr 2015 10:12:49 +0200
+
 pve-kernel-3.10.0 (3.10.0-31) unstable; urgency=medium
 
   * include latest DRBD 9.0 driver

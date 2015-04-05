@@ -1,0 +1,46 @@
+From 39f1f78d53b9bcbca91967380c5f0f2305a5c55f Mon Sep 17 00:00:00 2001
+From: Al Viro <viro@zeniv.linux.org.uk>
+Date: Tue, 6 May 2014 14:02:53 -0400
+Subject: nick kvfree() from apparmor
+
+too many places open-code it
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+
+diff --git a/security/apparmor/include/apparmor.h b/security/apparmor/include/apparmor.h
+index 8fb1488..97130f8 100644
+--- a/security/apparmor/include/apparmor.h
++++ b/security/apparmor/include/apparmor.h
+@@ -66,7 +66,6 @@ extern int apparmor_initialized __initdata;
+ char *aa_split_fqname(char *args, char **ns_name);
+ void aa_info_message(const char *str);
+ void *__aa_kvmalloc(size_t size, gfp_t flags);
+-void kvfree(void *buffer);
+ 
+ static inline void *kvmalloc(size_t size)
+ {
+diff --git a/security/apparmor/lib.c b/security/apparmor/lib.c
+index 6968992..c1827e0 100644
+--- a/security/apparmor/lib.c
++++ b/security/apparmor/lib.c
+@@ -104,17 +104,3 @@ void *__aa_kvmalloc(size_t size, gfp_t flags)
+ 	}
+ 	return buffer;
+ }
+-
+-/**
+- * kvfree - free an allocation do by kvmalloc
+- * @buffer: buffer to free (MAYBE_NULL)
+- *
+- * Free a buffer allocated by kvmalloc
+- */
+-void kvfree(void *buffer)
+-{
+-	if (is_vmalloc_addr(buffer))
+-		vfree(buffer);
+-	else
+-		kfree(buffer);
+-}
+-- 
+cgit v0.10.2
+

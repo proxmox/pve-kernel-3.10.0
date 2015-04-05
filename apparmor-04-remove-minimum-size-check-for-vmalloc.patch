@@ -1,0 +1,32 @@
+From dfe4ac28be73833556756dca6771d4274a7f1157 Mon Sep 17 00:00:00 2001
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Date: Mon, 17 Jun 2013 21:25:08 +0900
+Subject: apparmor: remove minimum size check for vmalloc()
+
+This is a follow-up to commit b5b3ee6c "apparmor: no need to delay vfree()".
+
+Since vmalloc() will do "size = PAGE_ALIGN(size);",
+we don't need to check for "size >= sizeof(struct work_struct)".
+
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: John Johansen <john.johansen@canonical.com>
+
+diff --git a/security/apparmor/lib.c b/security/apparmor/lib.c
+index fcfe023..6968992 100644
+--- a/security/apparmor/lib.c
++++ b/security/apparmor/lib.c
+@@ -97,11 +97,6 @@ void *__aa_kvmalloc(size_t size, gfp_t flags)
+ 	if (size <= (16*PAGE_SIZE))
+ 		buffer = kmalloc(size, flags | GFP_NOIO | __GFP_NOWARN);
+ 	if (!buffer) {
+-		/* see kvfree for why size must be at least work_struct size
+-		 * when allocated via vmalloc
+-		 */
+-		if (size < sizeof(struct work_struct))
+-			size = sizeof(struct work_struct);
+ 		if (flags & __GFP_ZERO)
+ 			buffer = vzalloc(size);
+ 		else
+-- 
+cgit v0.10.2
+
