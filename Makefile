@@ -210,6 +210,12 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
 	cd ${KERNEL_SRC}; patch -p1 <../override_for_missing_acs_capabilities.patch
 	cd ${KERNEL_SRC}; patch -p1 <../vhost-net-extend-device-allocation-to-vmalloc.patch
+	# patches from apparmor package
+	cd ${KERNEL_SRC}; patch -p1 <../0001-UBUNTU-SAUCE-AppArmor-Add-profile-introspection-file.patch
+	cd ${KERNEL_SRC}; patch -p1 <../0002-UBUNTU-SAUCE-AppArmor-basic-networking-rules.patch
+	cd ${KERNEL_SRC}; patch -p1 <../0003-apparmor-Fix-quieting-of-audit-messages-for-network-.patch
+	cd ${KERNEL_SRC}; patch -p1 <../0004-UBUNTU-SAUCE-apparmor-Add-the-ability-to-mediate-mou.patch
+	# apparmor update from upstream
 	cd ${KERNEL_SRC}; patch -p1 <../apparmor-01-add-kvzalloc-to-handle-zeroing-for-kvmalloc.patch 
 	cd ${KERNEL_SRC}; patch -p1 <../apparmor-02-fix-fully-qualified-name-parsing.patch 
 	cd ${KERNEL_SRC}; patch -p1 <../apparmor-03-no-need-to-delay-vfree.patch
