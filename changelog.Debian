@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-33) unstable; urgency=medium
+
+  * updaupdate to kernel-3.10.0-229.1.2.el7.src.rpm
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 10 Apr 2015 16:15:34 +0200
+
 pve-kernel-3.10.0 (3.10.0-32) unstable; urgency=medium
 
   * use apparmor as default security module
