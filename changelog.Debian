@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-31) unstable; urgency=low
+
+  * update to kernel-3.10.0-229.1.2.el7.src.rpm
+  
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 10 Apr 2015 16:34:40 +0200
+
 pve-kernel-3.10.0 (3.10.0-30) unstable; urgency=medium
 
   * update to kernel-3.10.0-229.el7.src.rpm
