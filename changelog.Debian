@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-32) unstable; urgency=low
+
+  * update zfs/spl 0.6.4, bump api version to 9-pve
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 13 Apr 2015 08:48:33 +0200
+
 pve-kernel-3.10.0 (3.10.0-31) unstable; urgency=low
 
   * update to kernel-3.10.0-229.1.2.el7.src.rpm
