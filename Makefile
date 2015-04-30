@@ -1,7 +1,7 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=32
+PKGREL=33
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=9
@@ -68,10 +68,10 @@ ARECASRC=${ARECADIR}.zip
 #ISCSITARGETDIR=iscsitarget-1.4.20.2
 #ISCSITARGETSRC=${ISCSITARGETDIR}.tar.gz
 
-ZFSVER=0.6.4
-SPLDIR=spl-spl-${ZFSVER}
+ZFSVER=0.6.4.1
+SPLDIR=spl-${ZFSVER}
 SPLSRC=spl-${ZFSVER}.tar.gz
-ZFSDIR=zfs-zfs-${ZFSVER}
+ZFSDIR=zfs-${ZFSVER}
 ZFSSRC=zfs-${ZFSVER}.tar.gz
 ZFS_MODULES=zfs.ko zavl.ko znvpair.ko zunicode.ko zcommon.ko zpios.ko
 SPL_MODULES=spl.ko splat.ko
