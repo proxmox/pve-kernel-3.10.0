@@ -1,10 +1,10 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=33
+PKGREL=34
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=9
+KREL=10
 
 RHKVER=229.1.2.el7
 
@@ -33,13 +33,13 @@ FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 E1000EDIR=e1000e-3.1.0.2
 E1000ESRC=${E1000EDIR}.tar.gz
 
-IGBDIR=igb-5.2.15
+IGBDIR=igb-5.2.18
 IGBSRC=${IGBDIR}.tar.gz
 
-IXGBEDIR=ixgbe-3.23.2
+IXGBEDIR=ixgbe-4.0.3
 IXGBESRC=${IXGBEDIR}.tar.gz
 
-I40EDIR=i40e-1.2.37
+I40EDIR=i40e-1.2.38
 I40ESRC=${I40EDIR}.tar.gz
 
 BNX2DIR=netxtreme2-7.11.05
