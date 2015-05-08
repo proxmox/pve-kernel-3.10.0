@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-35) unstable; urgency=medium
+
+  * drbd9 update to commit 6d340f1f63db9d2dd38e3696e47c0d0e49f3f6b2
+  
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 08 May 2015 10:21:56 +0200
+
 pve-kernel-3.10.0 (3.10.0-34) unstable; urgency=medium
 
   * update zfs/spl 0.6.4, bump api version to 9-pve

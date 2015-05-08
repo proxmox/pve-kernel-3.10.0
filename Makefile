@@ -1,10 +1,10 @@
 RELEASE=4.0
 
 KERNEL_VER=3.10.0
-PKGREL=34
+PKGREL=35
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=9
+KREL=10
 
 RHKVER=229.1.2.el7
 
