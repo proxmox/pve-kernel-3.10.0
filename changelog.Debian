@@ -1,5 +1,11 @@
 pve-kernel-3.10.0 (3.10.0-35) unstable; urgency=medium
 
+  * update igb driver to 5.2.18
+  
+  * update ixgbe driver to 4.0.3
+  
+  * update i40e driver to 1.2.38
+
   * drbd9 update to commit 6d340f1f63db9d2dd38e3696e47c0d0e49f3f6b2
   
  -- Proxmox Support Team <support@proxmox.com>  Fri, 08 May 2015 10:21:56 +0200
