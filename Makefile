@@ -77,8 +77,6 @@ SPL_MODULES=spl.ko splat.ko
 
 DST_DEB=${PACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
 HDR_DEB=${HDRPACKAGE}_${KERNEL_VER}-${PKGREL}_${ARCH}.deb
-PVEPKG=proxmox-ve-${KERNEL_VER}
-PVE_DEB=${PVEPKG}_${RELEASE}-${PKGREL}_all.deb
 
 all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 
@@ -86,7 +84,8 @@ all: check_gcc ${DST_DEB} ${FW_DEB} ${HDR_DEB}
 download:
 	rm -f ${KERNELSRCRPM}
 	#wget http://vault.centos.org/7.0.1406/os/Source/SPackages/${KERNELSRCRPM}
-	wget http://vault.centos.org/7.0.1406/updates/Source/SPackages/${KERNELSRCRPM}
+	#wget http://vault.centos.org/7.0.1406/updates/Source/SPackages/${KERNELSRCRPM}
+	wget http://vault.centos.org/7.1.1503/updates/Source/SPackages/${KERNELSRCRPM}
 
 check_gcc: 
 ifeq    ($(CC), cc)
