@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-38) unstable; urgency=low
+
+  * update zfs/spl modules to 0.6.5.2
+
+ -- Proxmox Support Team <support@proxmox.com>  Fri, 09 Oct 2015 10:45:07 +0200
+
 pve-kernel-3.10.0 (3.10.0-37) unstable; urgency=low
 
   * update to kernel-3.10.0-229.14.1.el7.src.rpm
