@@ -177,6 +177,7 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../do-not-use-barrier-on-ext3.patch
 	cd ${KERNEL_SRC}; patch -p1 <../bridge-patch.diff
 	cd ${KERNEL_SRC}; patch -p1 <../bridge-forward-ipv6-neighbor-solicitation.patch
+	cd ${KERNEL_SRC}; patch -p1 <../kvmstealtime.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kvm-fix-invalid-secondary-exec-controls.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-aspm-policy.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kbuild-generate-mudules-builtin.patch

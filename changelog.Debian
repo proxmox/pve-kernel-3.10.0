@@ -3,6 +3,8 @@ pve-kernel-3.10.0 (3.10.0-39) unstable; urgency=low
   * update to kernel-3.10.0-229.20.1.el7.src.rpm
   
   * bump api version to 14-pve
+  
+  * add kvm steal time fix
 
  -- Proxmox Support Team <support@proxmox.com>  Tue, 08 Dec 2015 11:34:30 +0100
 
