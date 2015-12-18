@@ -33,7 +33,7 @@ FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 E1000EDIR=e1000e-3.3.1
 E1000ESRC=${E1000EDIR}.tar.gz
 
-IGBDIR=igb-5.2.18
+IGBDIR=igb-5.3.3.5
 IGBSRC=${IGBDIR}.tar.gz
 
 IXGBEDIR=ixgbe-4.0.3
