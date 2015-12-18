@@ -19,14 +19,14 @@ Additional/Updated Modules:
 
 - include latest e1000e driver from intel/sourceforge
 
- include latest Broadcom bnx2 drivers: http://driverdownloads.qlogic.com/
-
-  * original file linux-7.11.05.zip contains
-    netxtreme2-7.11.05.tar.gz (added to repository)
-
-- include latest Adaptec aacraid driver
-
-  * http://download.adaptec.com/raid/aac/linux/aacraid-linux-src-1.2.1-40300.tgz
+#- include latest Broadcom bnx2 drivers: http://driverdownloads.qlogic.com/
+#
+#  * original file linux-7.11.05.zip contains
+#    netxtreme2-7.11.05.tar.gz (added to repository)
+#
+#- include latest Adaptec aacraid driver
+#
+#  * http://download.adaptec.com/raid/aac/linux/aacraid-linux-src-1.2.1-40300.tgz
 
 - include latest ARECA RAID drivers
 

@@ -15,6 +15,10 @@ pve-kernel-3.10.0 (3.10.0-40) unstable; urgency=low
   * update i40e to 1.3.49
   
   * update ixgbe to 4.2.3
+  
+  * use upstream bnx2 drivers (drivers from qlogic does not compile)
+  
+  * use upstream aacraid (drivers from adaptect site does not compile)
 
  -- Proxmox Support Team <support@proxmox.com>  Fri, 18 Dec 2015 09:25:51 +0100
 

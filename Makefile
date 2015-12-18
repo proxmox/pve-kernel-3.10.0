@@ -42,9 +42,11 @@ IXGBESRC=${IXGBEDIR}.tar.gz
 I40EDIR=i40e-1.3.49
 I40ESRC=${I40EDIR}.tar.gz
 
+# does not compile with RHEL 7.2 (=327.3.1.el7)
 BNX2DIR=netxtreme2-7.11.05
 BNX2SRC=${BNX2DIR}.tar.gz
 
+# does not compile with RHEL 7.2 (=327.3.1.el7)
 AACRAIDVER=1.2.1-40700
 AACRAIDDIR=aacraid-${AACRAIDVER}.src
 AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
@@ -118,7 +120,8 @@ fwlist-${KVNAME}: data
 	mv fwlist.tmp $@
 
 # fixme: bnx2.ko cnic.ko bnx2x.ko
-data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic.ko bnx2x.ko aacraid.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES}
+# todo: aacraid.ko ?
+data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko arcmsr.ko hpsa.ko ${SPL_MODULES} ${ZFS_MODULES}
 	rm -rf data tmp; mkdir -p tmp/lib/modules/${KVNAME}
 	mkdir tmp/boot
 	install -m 644 ${KERNEL_CFG} tmp/boot/config-${KVNAME}
@@ -134,11 +137,11 @@ data: .compile_mark ${KERNEL_CFG} e1000e.ko igb.ko i40e.ko ixgbe.ko bnx2.ko cnic
 	# install latest ibg driver
 	install -m 644 igb.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/intel/igb/
 	## install bnx2 drivers
-	install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
-	install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
-	install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
+	#install -m 644 bnx2.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	#install -m 644 cnic.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/
+	#install -m 644 bnx2x.ko tmp/lib/modules/${KVNAME}/kernel/drivers/net/ethernet/broadcom/bnx2x/
 	# install aacraid drivers
-	install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
+	#install -m 644 aacraid.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/aacraid/
 	# install hpsa driver
 	install -m 644 hpsa.ko tmp/lib/modules/${KVNAME}/kernel/drivers/scsi/
 	# install megaraid_sas driver
