@@ -1,0 +1,62 @@
+several vhosts-scsi fixes to allow compile
+
+seems RH backported, some patches, but cghanges for disabled VHOST_SCSI 
+module are missing.
+
+--- linux-2.6-3.10.0/drivers/vhost/scsi.c.backup	2015-12-18 12:27:17.000000000 +0100
++++ linux-2.6-3.10.0/drivers/vhost/scsi.c	2015-12-18 13:07:38.000000000 +0100
+@@ -54,6 +54,7 @@
+ #define TCM_VHOST_VERSION  "v0.1"
+ #define TCM_VHOST_NAMELEN 256
+ #define TCM_VHOST_MAX_CDB_SIZE 32
++#define TCM_VHOST_DEFAULT_TAGS 256
+ 
+ struct vhost_scsi_inflight {
+ 	/* Wait for the flush operation to finish */
+@@ -847,7 +848,7 @@
+ 			tv_cmd->tvc_lun, tv_cmd->tvc_exp_data_len,
+ 			tv_cmd->tvc_task_attr, tv_cmd->tvc_data_direction,
+ 			0, sg_ptr, tv_cmd->tvc_sgl_count,
+-			sg_bidi_ptr, sg_no_bidi);
++                        sg_bidi_ptr, sg_no_bidi, NULL, 0);
+ 	if (rc < 0) {
+ 		transport_send_check_condition_and_sense(se_cmd,
+ 				TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE, 0);
+@@ -1656,7 +1657,11 @@
+ 	/*
+ 	 *  Initialize the struct se_session pointer
+ 	 */
+-	tv_nexus->tvn_se_sess = transport_init_session();
++	tv_nexus->tvn_se_sess = transport_init_session_tags(
++            TCM_VHOST_DEFAULT_TAGS,
++            sizeof(struct tcm_vhost_cmd),	
++            TARGET_PROT_NORMAL);
++
+ 	if (IS_ERR(tv_nexus->tvn_se_sess)) {
+ 		mutex_unlock(&tv_tpg->tv_tpg_mutex);
+ 		kfree(tv_nexus);
+@@ -2056,15 +2061,15 @@
+ 	/*
+ 	 * Setup default attribute lists for various fabric->tf_cit_tmpl
+ 	 */
+-	TF_CIT_TMPL(fabric)->tfc_wwn_cit.ct_attrs = tcm_vhost_wwn_attrs;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_base_cit.ct_attrs = tcm_vhost_tpg_attrs;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_attrib_cit.ct_attrs = NULL;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_param_cit.ct_attrs = NULL;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_np_base_cit.ct_attrs = NULL;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_nacl_base_cit.ct_attrs = NULL;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_nacl_attrib_cit.ct_attrs = NULL;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_nacl_auth_cit.ct_attrs = NULL;
+-	TF_CIT_TMPL(fabric)->tfc_tpg_nacl_param_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_wwn_cit.ct_attrs = tcm_vhost_wwn_attrs;
++	fabric->tf_cit_tmpl.tfc_tpg_base_cit.ct_attrs = tcm_vhost_tpg_attrs;
++	fabric->tf_cit_tmpl.tfc_tpg_attrib_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_tpg_param_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_tpg_np_base_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_tpg_nacl_base_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_tpg_nacl_attrib_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_tpg_nacl_auth_cit.ct_attrs = NULL;
++	fabric->tf_cit_tmpl.tfc_tpg_nacl_param_cit.ct_attrs = NULL;
+ 	/*
+ 	 * Register the fabric for use within TCM
+ 	 */
