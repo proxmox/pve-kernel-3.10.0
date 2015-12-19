@@ -27,7 +27,7 @@ KERNEL_CFG=config-${KERNEL_VER}
 KERNEL_CFG_ORG=${RHKERSRCDIR}/kernel-${KERNEL_VER}-x86_64.config
 
 FW_VER=1.1
-FW_REL=4
+FW_REL=5
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
 E1000EDIR=e1000e-3.3.1

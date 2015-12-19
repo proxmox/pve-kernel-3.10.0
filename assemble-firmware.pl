@@ -18,7 +18,10 @@ die "no target directory" if !$target || ! -d $target;
 my $force_skip = {
 
     # not needed, the HBA has burned-in firmware
+    'ql2600_fw.bin' => 1,
+    'ql2700_fw.bin' => 1,
     'ql8100_fw.bin' => 1,
+    'ql8300_fw.bin' => 1,
 };
 
 my $skip = {};
@@ -150,6 +153,18 @@ cxgb4/t4fw.bin
 cxgb4/t4fw-1.3.10.0.bin
 
 ast_dp501_fw.bin
+
+iwlwifi-3160-IWL3160_UCODE_API_OK.ucode
+iwlwifi-8000-12.ucode
+wil6210.board
+wil6210.fw
+mrvl/usb8801_uapsta.bin
+rtlwifi/rtl8723efw.bin
+brcm/brcmfmac43455-sdio.txt 
+brcm/brcmfmac43430-sdio.txt
+brcm/brcmfmac43430-sdio.bin
+brcm/brcmfmac43340-sdio.txt
+
 
 )) {
     $skip->{$fw} = 1;
