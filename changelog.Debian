@@ -1,3 +1,11 @@
+pve-kernel-3.10.0 (3.10.0-42) unstable; urgency=low
+
+  * update to kernel-3.10.0-327.4.4.el7.src.rpm
+  
+  * fix CVE-2016-0728
+
+ -- Proxmox Support Team <support@proxmox.com>  Thu, 21 Jan 2016 09:28:43 +0100
+
 pve-kernel-3.10.0 (3.10.0-41) unstable; urgency=low
 
   * update zfs/spl modules to 0.6.5.4

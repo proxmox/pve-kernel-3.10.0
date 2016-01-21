@@ -1,12 +1,12 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=41
+PKGREL=42
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=15
+KREL=16
 
-RHKVER=327.3.1.el7
+RHKVER=327.4.4.el7
 
 KERNELSRCRPM=kernel-${KERNEL_VER}-${RHKVER}.src.rpm
 
@@ -87,7 +87,7 @@ download:
 	rm -f ${KERNELSRCRPM}
 	#wget http://vault.centos.org/7.0.1406/os/Source/SPackages/${KERNELSRCRPM}
 	#wget http://vault.centos.org/7.0.1406/updates/Source/SPackages/${KERNELSRCRPM}
-	wget http://vault.centos.org/7.1.1503/updates/Source/SPackages/${KERNELSRCRPM}
+	wget http://vault.centos.org/7.2.1511/updates/Source/SPackages/${KERNELSRCRPM}
 
 check_gcc: 
 ifeq    ($(CC), cc)
@@ -193,6 +193,8 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	cp ${KERNEL_SRC}/drivers/vhost/scsi.c ${KERNEL_SRC}/drivers/vhost/scsi.c.backup	
 	# vhost-scsi compile fixes
 	cd ${KERNEL_SRC}; patch -p1 <../vhost-scsi-fixes.patch
+	# fix CVE-2016-0728
+	cd ${KERNEL_SRC}; patch -p1 <../CVE-2016-0728-fix-keyring-ref-leak.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 
