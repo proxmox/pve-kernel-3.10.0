@@ -1,12 +1,12 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=42
+PKGREL=43
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
 KREL=16
 
-RHKVER=327.4.4.el7
+RHKVER=327.4.5.el7
 
 KERNELSRCRPM=kernel-${KERNEL_VER}-${RHKVER}.src.rpm
 
@@ -193,8 +193,6 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	cp ${KERNEL_SRC}/drivers/vhost/scsi.c ${KERNEL_SRC}/drivers/vhost/scsi.c.backup	
 	# vhost-scsi compile fixes
 	cd ${KERNEL_SRC}; patch -p1 <../vhost-scsi-fixes.patch
-	# fix CVE-2016-0728
-	cd ${KERNEL_SRC}; patch -p1 <../CVE-2016-0728-fix-keyring-ref-leak.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 
