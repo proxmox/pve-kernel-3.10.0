@@ -3,6 +3,8 @@ pve-kernel-3.10.0 (3.10.0-44) unstable; urgency=low
   * update to kernel-3.10.0-327.10.1.el7.src.rpm
   
   * bump api version to 17-pve
+  
+  * fix #896: veth: don’t modify ip_summed
 
  -- Proxmox Support Team <support@proxmox.com>  Thu, 25 Feb 2016 17:17:43 +0100
 
