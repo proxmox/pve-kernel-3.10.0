@@ -6,6 +6,14 @@ pve-kernel-3.10.0 (3.10.0-46) unstable; urgency=low
   
   * bump api to 18-pve
   
+  * update e1000e to 3.3.3
+  
+  * update igb to 5.3.4.4
+  
+  * update ixgbe to 4.3.15
+  
+  * update i40e to 1.5.16
+  
  -- Proxmox Support Team <support@proxmox.com>  Sat, 16 Apr 2016 17:01:29 +0200
 
 pve-kernel-3.10.0 (3.10.0-45) unstable; urgency=low

@@ -30,16 +30,16 @@ FW_VER=1.1
 FW_REL=5
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
-E1000EDIR=e1000e-3.3.1
+E1000EDIR=e1000e-3.3.3
 E1000ESRC=${E1000EDIR}.tar.gz
 
-IGBDIR=igb-5.3.3.5
+IGBDIR=igb-5.3.4.4
 IGBSRC=${IGBDIR}.tar.gz
 
-IXGBEDIR=ixgbe-4.2.3
+IXGBEDIR=ixgbe-4.3.15
 IXGBESRC=${IXGBEDIR}.tar.gz
 
-I40EDIR=i40e-1.3.49
+I40EDIR=i40e-1.5.16
 I40ESRC=${I40EDIR}.tar.gz
 
 # does not compile with RHEL 7.2 (=327.3.1.el7)
