@@ -1,3 +1,13 @@
+pve-kernel-3.10.0 (3.10.0-46) unstable; urgency=low
+
+  * update to kernel-3.10.0-327.13.1.el7.src.rpm
+
+  * remove veth-do-not-modify-ip_summed.patch (upstream)
+  
+  * bump api to 18-pve
+  
+ -- Proxmox Support Team <support@proxmox.com>  Sat, 16 Apr 2016 17:01:29 +0200
+
 pve-kernel-3.10.0 (3.10.0-45) unstable; urgency=low
 
   * update spl/zfs to 0.6.5.6
