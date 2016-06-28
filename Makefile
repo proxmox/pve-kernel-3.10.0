@@ -377,16 +377,7 @@ ${FW_DEB} fw: control.firmware linux-firmware.git/WHENCE dvb-firmware.git/README
 
 .PHONY: upload
 upload: ${DST_DEB} ${HDR_DEB} ${FW_DEB}
-	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o rw 
-	mkdir -p /pve/${RELEASE}/extra
-	mkdir -p /pve/${RELEASE}/install
-	rm -rf /pve/${RELEASE}/extra/${PACKAGE}_*.deb
-	rm -rf /pve/${RELEASE}/extra/${HDRPACKAGE}_*.deb
-	rm -rf /pve/${RELEASE}/extra/pve-firmware*.deb
-	rm -rf /pve/${RELEASE}/extra/Packages*
-	cp ${DST_DEB} ${FW_DEB} ${HDR_DEB} /pve/${RELEASE}/extra
-	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
+	tar -cf - ${DST_DEB} ${HDR_DEB} ${FW_DEB} | ssh repoman@repo.proxmox.com upload --dist wheezy
 
 .PHONY: distclean
 distclean: clean
