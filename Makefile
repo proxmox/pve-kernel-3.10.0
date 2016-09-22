@@ -1,12 +1,12 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=48
+PKGREL=49
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=19
+KREL=20
 
-RHKVER=327.18.2.el7
+RHKVER=327.36.1.el7
 
 KERNELSRCRPM=kernel-${KERNEL_VER}-${RHKVER}.src.rpm
 
