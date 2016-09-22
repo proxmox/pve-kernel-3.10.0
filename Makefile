@@ -39,7 +39,7 @@ IGBSRC=${IGBDIR}.tar.gz
 IXGBEDIR=ixgbe-4.3.15
 IXGBESRC=${IXGBEDIR}.tar.gz
 
-I40EDIR=i40e-1.5.16
+I40EDIR=i40e-1.5.22
 I40ESRC=${I40EDIR}.tar.gz
 
 # does not compile with RHEL 7.2 (=327.3.1.el7)
