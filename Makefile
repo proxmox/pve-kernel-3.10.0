@@ -51,9 +51,9 @@ AACRAIDVER=1.2.1-40700
 AACRAIDDIR=aacraid-${AACRAIDVER}.src
 AACRAIDSRC=aacraid-linux-src-${AACRAIDVER}.tgz
 
-HPSAVER=3.4.6
+HPSAVER=3.4.16
 HPSADIR=hpsa-${HPSAVER}
-HPSASRC=${HPSADIR}-170.tar.bz2
+HPSASRC=${HPSADIR}-145.tar.bz2
 
 # driver does not compile
 #MEGARAID_DIR=megaraid_sas-06.703.11.00
