@@ -193,6 +193,7 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	cp ${KERNEL_SRC}/drivers/vhost/scsi.c ${KERNEL_SRC}/drivers/vhost/scsi.c.backup	
 	# vhost-scsi compile fixes
 	cd ${KERNEL_SRC}; patch -p1 <../vhost-scsi-fixes.patch
+	cd ${KERNEL_SRC}; patch -p1 <../CVE-2016-5195.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 

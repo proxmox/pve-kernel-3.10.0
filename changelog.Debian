@@ -4,6 +4,8 @@ pve-kernel-3.10.0 (3.10.0-50) unstable; urgency=low
 
   * bump api to 21-pve
   
+  * fix CVE 2016-5195 (CVE-2016-5195.patch)
+  
  -- Proxmox Support Team <support@proxmox.com>  Fri, 21 Oct 2016 15:43:49 +0200
 
 pve-kernel-3.10.0 (3.10.0-49) unstable; urgency=low
