@@ -1,3 +1,29 @@
+pve-kernel-3.10.0 (3.10.0-51) unstable; urgency=low
+
+  * update to kernel-3.10.0-514.el7.src.rpm
+  
+  * bump api to 22-pve
+  
+  * remove kvmstealtime.patch (upstream)
+  
+  * remove vhost-net-extend-device-allocation-to-vmalloc.patch (upstream)
+  
+  * remove CVE-2016-5195.patch (upstream)
+
+  * disabled add-empty-ndo_poll_controller-to-veth.patch (does not apply)
+  
+  * ndb: nbd-rename-REQ_TYPE_SPECIAL.patch (fix compile error)
+
+  * update e1000e to 3.3.5.3
+  
+  * update igb to 5.3.5.4
+  
+  * update i40e to 1.5.25
+  
+  * update ixgbe to 4.5.4
+
+ -- Proxmox Support Team <support@proxmox.com>  Sun, 18 Dec 2016 14:56:16 +0100
+
 pve-kernel-3.10.0 (3.10.0-50) unstable; urgency=low
 
   * update to kernel-3.10.0-327.36.2.el7.src.rpm

@@ -1,12 +1,12 @@
 RELEASE=3.4
 
 KERNEL_VER=3.10.0
-PKGREL=50
+PKGREL=51
 # also include firmware of previous versrion into 
 # the fw package:  fwlist-2.6.32-PREV-pve
-KREL=21
+KREL=22
 
-RHKVER=327.36.2.el7
+RHKVER=514.el7
 
 KERNELSRCRPM=kernel-${KERNEL_VER}-${RHKVER}.src.rpm
 
@@ -27,19 +27,19 @@ KERNEL_CFG=config-${KERNEL_VER}
 KERNEL_CFG_ORG=${RHKERSRCDIR}/kernel-${KERNEL_VER}-x86_64.config
 
 FW_VER=1.1
-FW_REL=5
+FW_REL=6
 FW_DEB=pve-firmware_${FW_VER}-${FW_REL}_all.deb
 
-E1000EDIR=e1000e-3.3.5
+E1000EDIR=e1000e-3.3.5.3
 E1000ESRC=${E1000EDIR}.tar.gz
 
-IGBDIR=igb-5.3.5.3
+IGBDIR=igb-5.3.5.4
 IGBSRC=${IGBDIR}.tar.gz
 
-IXGBEDIR=ixgbe-4.3.15
+IXGBEDIR=ixgbe-4.5.4
 IXGBESRC=${IXGBEDIR}.tar.gz
 
-I40EDIR=i40e-1.5.22
+I40EDIR=i40e-1.5.25
 I40ESRC=${I40EDIR}.tar.gz
 
 # does not compile with RHEL 7.2 (=327.3.1.el7)
@@ -180,20 +180,19 @@ ${KERNEL_SRC}/README: ${KERNEL_SRC}.org/README
 	#cd ${KERNEL_SRC}; patch -p1 <../do-not-use-barrier-on-ext3.patch
 	cd ${KERNEL_SRC}; patch -p1 <../bridge-patch.diff
 	cd ${KERNEL_SRC}; patch -p1 <../bridge-forward-ipv6-neighbor-solicitation.patch
-	cd ${KERNEL_SRC}; patch -p1 <../kvmstealtime.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kvm-fix-invalid-secondary-exec-controls.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-aspm-policy.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../kbuild-generate-mudules-builtin.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../add-tiocgdev-ioctl.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-nfs-block-count.patch
 	#cd ${KERNEL_SRC}; patch -p1 <../fix-idr-header-for-drbd-compilation.patch
-	cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
+	#cd ${KERNEL_SRC}; patch -p1 <../add-empty-ndo_poll_controller-to-veth.patch
 	# cd ${KERNEL_SRC}; patch -p1 <../override_for_missing_acs_capabilities.patch
-	cd ${KERNEL_SRC}; patch -p1 <../vhost-net-extend-device-allocation-to-vmalloc.patch
 	cp ${KERNEL_SRC}/drivers/vhost/scsi.c ${KERNEL_SRC}/drivers/vhost/scsi.c.backup	
 	# vhost-scsi compile fixes
 	cd ${KERNEL_SRC}; patch -p1 <../vhost-scsi-fixes.patch
-	cd ${KERNEL_SRC}; patch -p1 <../CVE-2016-5195.patch
+	# nbd compile fix
+	cd ${KERNEL_SRC}; patch -p1 <../nbd-rename-REQ_TYPE_SPECIAL.patch
 	sed -i ${KERNEL_SRC}/Makefile -e 's/^EXTRAVERSION.*$$/EXTRAVERSION=${EXTRAVERSION}/'
 	touch $@
 

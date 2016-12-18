@@ -165,6 +165,27 @@ brcm/brcmfmac43430-sdio.txt
 brcm/brcmfmac43430-sdio.bin
 brcm/brcmfmac43340-sdio.txt
 
+mrvl/sd8997_uapsta.bin
+mrvl/usb8997_uapsta.bin
+cxgb4/t6fw.bin
+wil6210.brd
+ath10k/QCA6174/hw3.0/firmware-5.bin
+ath10k/QCA6174/hw2.1/firmware-4.bin
+ath10k/QCA988X/hw2.0/board-2.bin
+ath10k/QCA988X/hw2.0/firmware-3.bin
+ath10k/QCA988X/hw2.0/firmware-2.bin
+iwlwifi-6000g2b-IWL6000G2B_UCODE_API_MAX.ucode
+iwlwifi-6000-6.ucode
+iwlwifi-8000C--21.ucode
+iwlwifi-9260-th-a0-lc-a0--21.ucode
+iwlwifi-9260-th-a0-jf-a0--21.ucode
+iwlwifi-9000-pu-a0-lc-a0--21.ucode
+brcm/brcmfmac4356-sdio.bin
+brcm/brcmfmac4366c-pcie.bin
+brcm/brcmfmac4365b-pcie.bin
+brcm/brcmfmac4359-pcie.bin
+brcm/brcmfmac4358-pcie.bi
+brcm/brcmfmac4358-pcie.bin
 
 )) {
     $skip->{$fw} = 1;
