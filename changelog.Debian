@@ -1,3 +1,9 @@
+pve-kernel-3.10.0 (3.10.0-52) unstable; urgency=low
+
+  * set CONFIG_BRIDGE_NETFILTER=y
+
+ -- Proxmox Support Team <support@proxmox.com>  Mon, 19 Dec 2016 09:24:24 +0100
+
 pve-kernel-3.10.0 (3.10.0-51) unstable; urgency=low
 
   * update to kernel-3.10.0-514.el7.src.rpm

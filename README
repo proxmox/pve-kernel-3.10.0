@@ -117,7 +117,7 @@ see config-3.10.0.diff
 
 - enable CONFIG_BCACHE=m (requested by user)
 
-- enable CONFIG_BRIDGE=y
+- enable CONFIG_BRIDGE=y,CONFIG_BRIDGE_NETFILTER=y
 
   Else we get warnings on boot, that
   net.bridge.bridge-nf-call-iptables is an unknown key
